@@ -17,7 +17,7 @@ class ClothController extends Controller
         if($request->has('all')){
             $cloths = Cloth::where('active',true)->get();
         } else {
-            $cloths = Cloth::where('active',true)->paginate(10);
+            $cloths = Cloth::with('user')->paginate(10);
         }
         return response()->json(['cloths' => $cloths]);
     }
@@ -72,7 +72,7 @@ class ClothController extends Controller
             $cloth->update([
                 'active' => !($cloth->active)
             ]);
-            return response()->json(['message' => $cloth->active ? 'cloth suspended' : "cloth activated"]);
+            return response()->json(['message' => "cloth status updated"]);
 
         } catch (\Throwable $th) {
             //throw $th;

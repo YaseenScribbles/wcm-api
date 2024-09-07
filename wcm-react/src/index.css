@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Matemasie&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+a.navbar-brand {
+    font-family: monospace;
+}
+
+ul.pagination {
+    margin: 0;
+}
+
+/* a.page-link {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+} */
+
+/* a.page-link:hover {
+    --bs-pagination-hover-color: #fff;
+    --bs-pagination-hover-bg: #424649;
+}
+
+a.page-link:visited {
+    --bs-pagination-focus-color:  #fff;
+    --bs-pagination-focus-bg: #424649;
+} */
+
+.pagination {
+    --bs-pagination-hover-color: #fff;
+    --bs-pagination-hover-bg: #424649;
+    --bs-pagination-focus-color: #fff;
+    --bs-pagination-focus-bg: #424649;
+    --bs-pagination-focus-box-shadow: 0 0 0 0.1rem rgba(13, 110, 253, 0.25);
+    --bs-pagination-color: var(--bs-light);
+    --bs-pagination-bg: var(--bs-dark);
+}
+
+.glass-card {
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.app-title {
+    font-family: "Matemasie", monospace;
+    font-size: 50px;
+}
+
+.modal-backdrop.show {
+    opacity: 0.1;
+}
+
+div.h5 {
+    margin: 0;
+}
+
+.table {
+    margin-bottom: 0.5rem;
+}
+
+td.contact-name {
+    max-width: 200px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+td.contact-address {
+    max-width: 300px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+

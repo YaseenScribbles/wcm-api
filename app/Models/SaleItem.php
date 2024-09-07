@@ -15,4 +15,6 @@ class SaleItem extends Model
         'weight',
         's_no',
     ];
+
+    public $timestamps = false;
 }

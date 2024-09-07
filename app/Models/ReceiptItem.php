@@ -16,4 +16,6 @@ class ReceiptItem extends Model
         's_no',
     ];
 
+    public $timestamps = false;
+
 }

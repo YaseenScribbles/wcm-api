@@ -17,7 +17,7 @@ class ColorController extends Controller
         if ($request->has('all')) {
             $colors = Color::where('active', true)->get();
         } else {
-            $colors = Color::where('active', true)->paginate(10);
+            $colors = Color::with('user')->paginate(10);
         }
         return response()->json(['colors' => $colors]);
     }
@@ -72,7 +72,7 @@ class ColorController extends Controller
             $color->update([
                 'active' => !($color->active)
             ]);
-            return response()->json(['message' => $color->active ? 'color suspended' : 'color activated']);
+            return response()->json(['message' => 'color status updated']);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['message' => $th->getMessage()], 500);

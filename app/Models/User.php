@@ -44,4 +44,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function cloths()
+    {
+        return $this->hasMany(Cloth::class);
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(Color::class);
+    }
+
 }

@@ -16,4 +16,15 @@ class Receipt extends Model
         'remarks',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function receipt_items()
+    {
+        return $this->hasMany(ReceiptItem::class,'receipt_id');
+    }
+
 }

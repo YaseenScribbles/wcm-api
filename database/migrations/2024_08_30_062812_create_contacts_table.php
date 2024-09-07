@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('address_line_1')->nullable();
-            $table->string('address_line_2')->nullable();
+            $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('pincode',6)->nullable();
             $table->string('phone')->nullable();

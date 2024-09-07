@@ -11,8 +11,7 @@ class Contact extends Model
 
     protected $fillable = [
         'name',
-        'address_line_1',
-        'address_line_2',
+        'address',
         'city',
         'pincode',
         'phone',
@@ -20,4 +19,9 @@ class Contact extends Model
         'active',
         'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
