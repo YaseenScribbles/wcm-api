@@ -43,14 +43,14 @@ const contactSlice = createSlice({
     }
 })
 
-const getContacts = createAsyncThunk("/contacts", async () => {
+export const getContacts = createAsyncThunk("contacts", async () => {
     try {
-        const resp = await axios.get(`${API_URL}/contact?all=true`,{
+        const resp = await axios.get(`${API_URL}contact?all=true`,{
             headers: {
                 Accept: "application/json"
             }
         });
-        return resp.data;
+        return resp.data.contacts;
     } catch (error) {
         return [];
     }

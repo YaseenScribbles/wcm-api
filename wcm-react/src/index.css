@@ -81,4 +81,17 @@ td.contact-address {
     overflow: hidden;
 }
 
+.custom-modal {
+    min-width: 60vw;
+    height: 90%;
+}
+
+td.cloth-input, td.color-input {
+    min-width: 200px;
+}
+
+td.weight-input {
+    max-width: 100px;
+}
+
 

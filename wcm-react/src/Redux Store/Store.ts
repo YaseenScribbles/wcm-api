@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useSelector } from "react-redux";
 import ColorSlice from "./Slices/ColorSlice";
 import ContactSlice from "./Slices/ContactSlice";
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         cloths: ClothSlice,
         colors: ColorSlice,

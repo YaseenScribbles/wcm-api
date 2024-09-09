@@ -40,12 +40,12 @@ const colorSlice = createSlice({
 
 export const getColors = createAsyncThunk("colors", async () => {
     try {
-        const resp = await axios.get(`${API_URL}/color?all=true`,{
+        const resp = await axios.get(`${API_URL}color?all=true`,{
             headers: {
                 Accept: "application/json"
             }
         });
-        return resp.data;
+        return resp.data.colors;
     } catch (error) {
         return [];
     }

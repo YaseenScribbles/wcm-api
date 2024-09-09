@@ -40,12 +40,12 @@ const clothSlice = createSlice({
 
 export const getCloths = createAsyncThunk("cloths", async () => {
     try {
-        const resp = await axios.get(`${API_URL}/cloth?all=true`,{
+        const resp = await axios.get(`${API_URL}cloth?all=true`,{
             headers: {
                 Accept: "application/json"
             }
         });
-        return resp.data;
+        return resp.data.cloths;
     } catch (error) {
         return [];
     }

@@ -5,6 +5,7 @@ import Cloth from "./pages/Cloth/Cloth";
 import Color from "./pages/Color/Color";
 import Users from "./pages/Users/Users";
 import Contact from "./pages/Contact/Contact";
+import Receipt from "./pages/Receipt/Receipt";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path:"/contact",
                 element:<Contact />
+            },
+            {
+                path:"/receipt",
+                element:<Receipt />
             }
         ],
     },

@@ -5,6 +5,8 @@ import router from "./router";
 import "boxicons";
 import { NotificationContextProvider } from "./contexts/NotificationContext";
 import UserContextProvider from "./contexts/UserContext";
+import { Provider } from "react-redux";
+import { store } from "./Redux Store/Store";
 
 declare global {
     namespace JSX {
@@ -17,11 +19,13 @@ declare global {
 function App() {
     return (
         <>
-            <UserContextProvider>
-                <NotificationContextProvider>
-                    <RouterProvider router={router} />
-                </NotificationContextProvider>
-            </UserContextProvider>
+            <Provider store={store}>
+                <UserContextProvider>
+                    <NotificationContextProvider>
+                        <RouterProvider router={router} />
+                    </NotificationContextProvider>
+                </UserContextProvider>
+            </Provider>
         </>
     );
 }
