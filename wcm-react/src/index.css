@@ -53,11 +53,13 @@ a.page-link:visited {
 .app-title {
     font-family: "Matemasie", monospace;
     font-size: 50px;
-    animation: moveDown 1s ease-out 0.5s;
+    animation: moveDown 1s linear;
+    animation-fill-mode: backwards;
 }
 
 .login-form {
-    animation: moveLeft 1s ease-out 0.5s;
+    animation: moveLeft 1s linear;
+    animation-fill-mode: backwards;
 }
 
 .modal-backdrop.show {
