@@ -53,6 +53,11 @@ a.page-link:visited {
 .app-title {
     font-family: "Matemasie", monospace;
     font-size: 50px;
+    animation: moveDown 1s ease-out 0.5s;
+}
+
+.login-form {
+    animation: moveLeft 1s ease-out 0.5s;
 }
 
 .modal-backdrop.show {
@@ -92,6 +97,50 @@ td.cloth-input, td.color-input {
 
 td.weight-input {
     max-width: 100px;
+}
+
+@keyframes moveDown {
+    0% {
+        transform: translateY(-50px);
+    }
+
+    25% {
+        transform: translateY(-35px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    75% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveLeft {
+    0% {
+        transform: translateX(50px);
+    }
+
+    25% {
+        transform: translateX(35px);
+    }
+
+    50% {
+        transform: translateX(20px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
 }
 
 

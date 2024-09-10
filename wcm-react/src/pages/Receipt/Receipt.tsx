@@ -84,10 +84,6 @@ const Receipt: React.FC = () => {
     };
 
     useEffect(() => {
-        getReceipts();
-    }, []);
-
-    useEffect(() => {
         getReceipts(currentPage);
     }, [currentPage]);
 
@@ -103,7 +99,7 @@ const Receipt: React.FC = () => {
                 <Table hover variant="dark" size="sm">
                     <thead>
                         <tr>
-                            <th>RECEIPT NO.</th>
+                            <th>R. NO.</th>
                             <th>DATE</th>
                             <th>REF. NO.</th>
                             <th>REF. DATE</th>

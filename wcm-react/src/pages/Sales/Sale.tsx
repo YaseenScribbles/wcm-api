@@ -4,21 +4,23 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
 import { API_URL } from "../../assets/common";
 import { useNotification } from "../../contexts/NotificationContext";
-const AddEditModal = lazy(() => import("./AddEditCloth"));
+const AddEditModal = lazy(() => import("./AddEditSale"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 
-type Cloth = {
+type Sale = {
     id: number;
-    name: string;
-    active: string;
-    user: {
-        name: string;
-    };
+    date: string;
+    ref_no: string;
+    ref_date: string;
+    contact: string;
+    remarks: string;
+    user: string;
+    weight: string;
 };
 
-const Cloth = () => {
+const Sale: React.FC = () => {
     const [loading, setLoading] = useState(false);
-    const [cloths, setCloths] = useState<Cloth[]>([]);
+    const [sales, setSales] = useState<Sale[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -27,12 +29,12 @@ const Cloth = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
 
-    const getCloths = async (page: number = 1) => {
+    const getSales = async (page: number = 1) => {
         try {
             setLoading(true);
-            const result = await axios.get(`${API_URL}cloth?page=${page}`);
-            const { data, total } = result.data.cloths;
-            setCloths(data);
+            const result = await axios.get(`${API_URL}sale?page=${page}`);
+            const { data, total } = result.data.sales;
+            setSales(data);
             setTotalRecords(total);
             const lastPage = Math.ceil(total / 10);
             setLastPage(lastPage);
@@ -51,10 +53,10 @@ const Cloth = () => {
         }
     };
 
-    const deleteCloth = async (id: number) => {
+    const deleteSale = async (id: number) => {
         try {
             setLoading(true);
-            const resp = await axios.delete(`${API_URL}cloth/${id}`, {
+            const resp = await axios.delete(`${API_URL}sale/${id}`, {
                 headers: {
                     Accept: "application/json",
                 },
@@ -65,7 +67,7 @@ const Cloth = () => {
                 message: message,
                 type: "success",
             });
-            getCloths(currentPage);
+            getSales(currentPage);
         } catch (error: any) {
             const {
                 response: {
@@ -82,14 +84,14 @@ const Cloth = () => {
     };
 
     useEffect(() => {
-        getCloths(currentPage);
+        getSales(currentPage);
     }, [currentPage]);
 
     return (
-        <Container>
+        <Container fluid>
             <Header
-                title="CLOTH"
-                buttonText="ADD CLOTH"
+                title="SALE"
+                buttonText="ADD SALE"
                 buttonFunction={() => setShowModal(true)}
             />
             <hr />
@@ -97,9 +99,13 @@ const Cloth = () => {
                 <Table hover variant="dark" size="sm">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>CLOTH</th>
-                            <th>ACTIVE</th>
+                            <th>S. NO.</th>
+                            <th>DATE</th>
+                            <th>REF. NO.</th>
+                            <th>REF. DATE</th>
+                            <th>CONTACT</th>
+                            <th>REMARKS</th>
+                            <th>WEIGHT</th>
                             <th>CREATED BY</th>
                             <th>ACTIONS</th>
                         </tr>
@@ -107,29 +113,35 @@ const Cloth = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={5} className="text-center">
+                                <td colSpan={9} className="text-center">
                                     Loading...
                                 </td>
                             </tr>
                         ) : (
-                            cloths.map((cloth, index) => {
+                            sales.map((sale, index) => {
                                 return (
                                     <tr key={index}>
+                                        <td>{sale.id}</td>
                                         <td>
-                                            {(currentPage - 1) * 10 + index + 1}
+                                            {new Date(
+                                                sale.date
+                                            ).toLocaleDateString()}
                                         </td>
-                                        <td>{cloth.name.toUpperCase()}</td>
+                                        <td>{sale.ref_no.toUpperCase()}</td>
                                         <td>
-                                            {cloth.active === "1"
-                                                ? "ACTIVE"
-                                                : "NOT ACTIVE"}
+                                            {new Date(
+                                                sale.ref_date
+                                            ).toLocaleDateString()}
                                         </td>
-                                        <td>{cloth.user.name.toUpperCase()}</td>
+                                        <td>{sale.contact.toUpperCase()}</td>
+                                        <td>{sale.remarks.toUpperCase()}</td>
+                                        <td>{(+sale.weight).toFixed(2)}</td>
+                                        <td>{sale.user.toUpperCase()}</td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
                                                     onClick={() => {
-                                                        setEditId(cloth.id);
+                                                        setEditId(sale.id);
                                                         setEditMode(true);
                                                         setShowModal(true);
                                                     }}
@@ -138,9 +150,11 @@ const Cloth = () => {
                                                 ></box-icon>
                                                 <box-icon
                                                     onClick={() =>
-                                                        deleteCloth(cloth.id)
+                                                        deleteSale(
+                                                            sale.id
+                                                        )
                                                     }
-                                                    name={cloth.active == "1" ? "minus" : "plus"}
+                                                    name="x"
                                                     color="white"
                                                 ></box-icon>
                                             </div>
@@ -179,7 +193,7 @@ const Cloth = () => {
                 <AddEditModal
                     show={showModal}
                     edit={editMode}
-                    onSave={() => getCloths(currentPage)}
+                    onSave={() => getSales(currentPage)}
                     onClose={() => {
                         setShowModal(false);
                         setEditMode(false);
@@ -191,4 +205,4 @@ const Cloth = () => {
     );
 };
 
-export default Cloth;
+export default Sale;

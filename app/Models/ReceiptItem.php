@@ -10,8 +10,9 @@ class ReceiptItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cloth',
-        'color',
+        'receipt_id',
+        'cloth_id',
+        'color_id',
         'weight',
         's_no',
     ];

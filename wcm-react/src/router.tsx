@@ -6,6 +6,8 @@ import Color from "./pages/Color/Color";
 import Users from "./pages/Users/Users";
 import Contact from "./pages/Contact/Contact";
 import Receipt from "./pages/Receipt/Receipt";
+import Sale from "./pages/Sales/Sale";
+import Stock from "./pages/Stock/Stock";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
             {
                 path:"/receipt",
                 element:<Receipt />
+            },
+            {
+                path:"/sale",
+                element: <Sale />
+            },
+            {
+                path:"/stock",
+                element: <Stock />
             }
         ],
     },

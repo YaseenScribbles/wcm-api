@@ -10,8 +10,9 @@ class SaleItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cloth',
-        'color',
+        'sale_id',
+        'cloth_id',
+        'color_id',
         'weight',
         's_no',
     ];

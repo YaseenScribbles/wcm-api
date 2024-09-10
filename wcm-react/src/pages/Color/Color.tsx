@@ -87,10 +87,6 @@ const Color = () => {
     };
 
     useEffect(() => {
-        getColors();
-    }, []);
-
-    useEffect(() => {
         getColors(currentPage);
     }, [currentPage]);
 

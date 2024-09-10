@@ -82,10 +82,6 @@ const Users: React.FC = () => {
     };
 
     useEffect(() => {
-        getUsers();
-    }, []);
-
-    useEffect(() => {
         getUsers(currentPage);
     }, [currentPage]);
 

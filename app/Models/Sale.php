@@ -16,4 +16,10 @@ class Sale extends Model
         'remarks',
         'user_id',
     ];
+
+    public function sale_items()
+    {
+        return $this->hasMany(SaleItem::class);
+    }
+
 }

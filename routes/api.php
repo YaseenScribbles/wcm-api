@@ -5,6 +5,7 @@ use App\Http\Controllers\ClothController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,5 @@ Route::apiResource('color',ColorController::class);
 Route::apiResource('user',UserController::class);
 Route::apiResource('contact',ContactController::class);
 Route::apiResource('receipt',ReceiptController::class);
+Route::apiResource('sale',SaleController::class);
 

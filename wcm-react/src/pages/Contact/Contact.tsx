@@ -111,10 +111,6 @@ const Contact: React.FC = () => {
     };
 
     useEffect(() => {
-        getContacts();
-    }, []);
-
-    useEffect(() => {
         getContacts(currentPage);
     }, [currentPage]);
 
