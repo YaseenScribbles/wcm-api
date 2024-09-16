@@ -137,6 +137,7 @@ const Cloth = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
+                                                    hidden
                                                     onClick={() =>
                                                         deleteCloth(cloth.id)
                                                     }

@@ -8,6 +8,7 @@ import Contact from "./pages/Contact/Contact";
 import Receipt from "./pages/Receipt/Receipt";
 import Sale from "./pages/Sales/Sale";
 import Stock from "./pages/Stock/Stock";
+import SaleInvoice from "./pages/Sales/SaleInvoice";
 
 const router = createBrowserRouter([
     {
@@ -31,22 +32,26 @@ const router = createBrowserRouter([
                 element: <Color />,
             },
             {
-                path:"/contact",
-                element:<Contact />
+                path: "/contact",
+                element: <Contact />,
             },
             {
-                path:"/receipt",
-                element:<Receipt />
+                path: "/receipt",
+                element: <Receipt />,
             },
             {
-                path:"/sale",
-                element: <Sale />
+                path: "/sale",
+                element: <Sale />,
             },
             {
-                path:"/stock",
-                element: <Stock />
-            }
+                path: "/stock",
+                element: <Stock />,
+            },
         ],
+    },
+    {
+        path: "/sale/:id",
+        element: <SaleInvoice />,
     },
 ]);
 

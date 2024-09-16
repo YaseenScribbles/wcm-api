@@ -142,6 +142,7 @@ const Color = () => {
                                                 color="white"
                                             ></box-icon>
                                             <box-icon
+                                                hidden
                                                 onClick={() =>
                                                     deleteColor(color.id)
                                                 }

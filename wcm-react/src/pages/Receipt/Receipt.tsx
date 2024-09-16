@@ -134,7 +134,7 @@ const Receipt: React.FC = () => {
                                             ).toLocaleDateString()}
                                         </td>
                                         <td>{receipt.contact.toUpperCase()}</td>
-                                        <td>{receipt.remarks.toUpperCase()}</td>
+                                        <td>{receipt.remarks && receipt.remarks.toUpperCase()}</td>
                                         <td>{(+receipt.weight).toFixed(2)}</td>
                                         <td>{receipt.user.toUpperCase()}</td>
                                         <td>

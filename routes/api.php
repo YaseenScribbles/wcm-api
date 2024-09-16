@@ -6,6 +6,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,6 @@ Route::apiResource('user',UserController::class);
 Route::apiResource('contact',ContactController::class);
 Route::apiResource('receipt',ReceiptController::class);
 Route::apiResource('sale',SaleController::class);
+Route::get('/delivery-stock',[SaleController::class,'stock']);
+Route::apiResource('report',ReportController::class)->only(['index','show']);
 

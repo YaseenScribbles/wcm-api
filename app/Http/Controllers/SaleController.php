@@ -66,6 +66,8 @@ class SaleController extends Controller
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
                     'weight' => $value['weight'],
+                    'rate' => $value['rate'],
+                    'amount' => $value['amount'],
                     's_no' => $key + 1
                 ]);
             }
@@ -106,6 +108,8 @@ class SaleController extends Controller
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
                     'weight' => $value['weight'],
+                    'rate' => $value['rate'],
+                    'amount' => $value['amount'],
                     's_no' => $key + 1
                 ]);
             }
@@ -128,6 +132,21 @@ class SaleController extends Controller
             SaleItem::where('sale_id', $sale->id)->delete();
             Sale::where('id', $sale->id)->delete();
             return response()->json(['message' => 'sale deleted successfully']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
+    public function stock()
+    {
+        try {
+            //code...
+            $stock = DB::table('stock as s')
+                ->where('s.weight', '>', 0)
+                ->orderBy('cloth_id')
+                ->orderBy('color_id')->get();
+            return response()->json(['stock' => $stock]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['message' => $th->getMessage()], 500);

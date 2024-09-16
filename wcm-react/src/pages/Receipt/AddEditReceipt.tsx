@@ -14,10 +14,12 @@ import { useUserContext } from "../../contexts/UserContext";
 import { AppDispatch, useTypedSelector } from "../../Redux Store/Store";
 import { useDispatch } from "react-redux";
 import { getContacts } from "../../Redux Store/Slices/ContactSlice";
-import { getColors } from "../../Redux Store/Slices/ColorSlice";
 import { getCloths } from "../../Redux Store/Slices/ClothSlice";
 import { useNotification } from "../../contexts/NotificationContext";
 import ReactSelect from "react-select";
+import AsyncCreateSelect from "react-select/async-creatable";
+import Color from "../Color/Color";
+import { getColors } from "../../Redux Store/Slices/ColorSlice";
 
 type AddEditReceiptProps = {
     show: boolean;
@@ -170,7 +172,10 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                 {
                     ...receipt,
                     receipt_items: state.items.filter(
-                        (item) => item.cloth_id !== null
+                        (item) =>
+                            item.cloth_id !== null &&
+                            item.color_id !== null &&
+                            item.weight !== ""
                     ),
                 },
                 {
@@ -263,7 +268,10 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                 {
                     ...receipt,
                     receipt_items: state.items.filter(
-                        (item) => item.cloth_id !== null
+                        (item) =>
+                            item.cloth_id !== null &&
+                            item.color_id !== null &&
+                            item.weight !== ""
                     ),
                 },
                 {
@@ -309,8 +317,8 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
         try {
             setLoading(true);
             await dispatch(getContacts());
-            await dispatch(getColors());
             await dispatch(getCloths());
+            await dispatch(getColors());
         } catch (error: any) {
             addNotification({
                 message: error,
@@ -318,6 +326,57 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
             });
         } finally {
             setLoading(false);
+        }
+    };
+
+    const loadColors = async (input: string) => {
+        const resp = await axios.get(
+            `${API_URL}color?all=true&filter=${input}`,
+            {
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+        const { colors } = resp.data;
+        return colors.map((item: Color) => ({
+            label: item.name.toUpperCase(),
+            value: item.id,
+        }));
+    };
+
+    const addNewColor = async (input: string) => {
+        try {
+            const resp = await axios.post(
+                `${API_URL}color`,
+                { name: input, user_id: user!.id },
+                {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                }
+            );
+
+            const { message } = resp.data;
+            await dispatch(getColors());
+            addNotification({
+                message,
+                type: "success",
+            });
+            // return {
+            //     label: color.name,
+            //     value: color.id,
+            // };
+        } catch (error: any) {
+            const {
+                response: {
+                    data: { message },
+                },
+            } = error;
+            addNotification({
+                message,
+                type: "failure",
+            });
         }
     };
 
@@ -441,7 +500,12 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                                     updateState({
                                         type: "ADD_ITEM",
                                         payload: {
-                                            cloth_id: null,
+                                            cloth_id:
+                                                state.items.length > 0
+                                                    ? state.items[
+                                                          state.items.length - 1
+                                                      ].cloth_id
+                                                    : null,
                                             color_id: null,
                                             weight: "",
                                         },
@@ -470,134 +534,162 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {state.items.map((item: ReceiptItem, index) => (
-                            <tr key={index}>
-                                <td style={{ verticalAlign: "middle" }}>
-                                    <div className="d-flex justify-content-center align-items-center h-100">
-                                        {index + 1}
-                                    </div>
-                                </td>
-                                <td className="cloth-input">
-                                    <div>
-                                        <ReactSelect
-                                            value={cloths
-                                                .filter(
-                                                    (cloth) =>
-                                                        cloth.id ==
-                                                        item.cloth_id
-                                                )
-                                                .map((cloth) => ({
-                                                    label: cloth.name.toUpperCase(),
-                                                    value: cloth.id,
-                                                }))}
-                                            options={cloths.map((cloth) => ({
-                                                label: cloth.name.toUpperCase(),
-                                                value: cloth.id,
-                                            }))}
-                                            onChange={(e) => {
-                                                updateState({
-                                                    type: "UPDATE_ITEM",
-                                                    payload: {
-                                                        ...item,
-                                                        cloth_id: +e!.value,
-                                                        index: index,
-                                                    },
-                                                });
-                                            }}
-                                        />
-                                    </div>
-                                </td>
-                                <td className="color-input">
-                                    <div>
-                                        <ReactSelect
-                                            value={colors
-                                                .filter(
-                                                    (color) =>
-                                                        color.id ==
-                                                        item.color_id
-                                                )
-                                                .map((color) => ({
-                                                    label: color.name.toUpperCase(),
-                                                    value: color.id,
-                                                }))}
-                                            isDisabled={item.cloth_id === null}
-                                            options={colors.map((color) => ({
-                                                label: color.name.toUpperCase(),
-                                                value: color.id,
-                                            }))}
-                                            onChange={(e) => {
-                                                updateState({
-                                                    type: "UPDATE_ITEM",
-                                                    payload: {
-                                                        ...item,
-                                                        color_id: +e!.value,
-                                                        index: index,
-                                                    },
-                                                });
-                                            }}
-                                        />
-                                    </div>
-                                </td>
-                                <td className="weight-input">
-                                    <div>
-                                        <Form.Control
-                                            disabled={item.cloth_id === null}
-                                            onChange={(e) => {
-                                                updateState({
-                                                    type: "UPDATE_ITEM",
-                                                    payload: {
-                                                        ...item,
-                                                        weight: e.target.value,
-                                                        index,
-                                                    },
-                                                });
-                                            }}
-                                            value={item.weight}
-                                        />
-                                    </div>
-                                </td>
-                                <td style={{ verticalAlign: "middle" }}>
-                                    <div className="d-flex align-items-center gap-1">
-                                        <Button
-                                            variant="dark"
-                                            className="d-flex"
-                                            onClick={() => {
-                                                updateState({
-                                                    type: "ADD_ITEM",
-                                                    payload: {
-                                                        cloth_id: null,
-                                                        color_id: null,
-                                                        weight: "",
-                                                    },
-                                                });
-                                            }}
-                                        >
-                                            <box-icon
-                                                name="plus"
-                                                color="white"
-                                            ></box-icon>
-                                        </Button>
-                                        <Button
-                                            variant="dark"
-                                            className="d-flex"
-                                            onClick={() => {
-                                                updateState({
-                                                    type: "REMOVE_ITEM",
-                                                    payload: {
-                                                        index: index,
-                                                    },
-                                                });
-                                            }}
-                                        >
-                                            <box-icon
-                                                name="minus"
-                                                color="white"
-                                            ></box-icon>
-                                        </Button>
-                                    </div>
+                        {loading ? (
+                            <tr>
+                                <td colSpan={5} className="text-center">
+                                    <box-icon
+                                        name="loader"
+                                        animation="spin"
+                                        size="lg"
+                                    ></box-icon>
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            state.items.length > 0 &&
+                            state.items.map((item: ReceiptItem, index) => (
+                                <tr key={index}>
+                                    <td style={{ verticalAlign: "middle" }}>
+                                        <div className="d-flex justify-content-center align-items-center h-100">
+                                            {index + 1}
+                                        </div>
+                                    </td>
+                                    <td className="cloth-input">
+                                        <div>
+                                            <ReactSelect
+                                                value={cloths
+                                                    .filter(
+                                                        (cloth) =>
+                                                            cloth.id ==
+                                                            item.cloth_id
+                                                    )
+                                                    .map((cloth) => ({
+                                                        label: cloth.name.toUpperCase(),
+                                                        value: cloth.id,
+                                                    }))}
+                                                options={cloths.map(
+                                                    (cloth) => ({
+                                                        label: cloth.name.toUpperCase(),
+                                                        value: cloth.id,
+                                                    })
+                                                )}
+                                                onChange={(e) => {
+                                                    updateState({
+                                                        type: "UPDATE_ITEM",
+                                                        payload: {
+                                                            ...item,
+                                                            cloth_id: +e!.value,
+                                                            index: index,
+                                                        },
+                                                    });
+                                                }}
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="color-input">
+                                        <div>
+                                            <AsyncCreateSelect
+                                                value={colors
+                                                    .filter(
+                                                        (color) =>
+                                                            color.id ==
+                                                            item.color_id
+                                                    )
+                                                    .map((color) => ({
+                                                        label: color.name.toUpperCase(),
+                                                        value: color.id,
+                                                    }))}
+                                                onChange={(e) => {
+                                                    updateState({
+                                                        type: "UPDATE_ITEM",
+                                                        payload: {
+                                                            ...item,
+                                                            color_id: +e!.value,
+                                                            index: index,
+                                                        },
+                                                    });
+                                                }}
+                                                loadOptions={loadColors}
+                                                onCreateOption={addNewColor}
+                                                isDisabled={
+                                                    item.cloth_id === null
+                                                }
+                                            />
+                                        </div>
+                                    </td>
+                                    <td className="weight-input">
+                                        <div>
+                                            <Form.Control
+                                                disabled={
+                                                    item.cloth_id === null
+                                                }
+                                                onChange={(e) => {
+                                                    updateState({
+                                                        type: "UPDATE_ITEM",
+                                                        payload: {
+                                                            ...item,
+                                                            weight: e.target
+                                                                .value,
+                                                            index,
+                                                        },
+                                                    });
+                                                }}
+                                                value={item.weight}
+                                            />
+                                        </div>
+                                    </td>
+                                    <td style={{ verticalAlign: "middle" }}>
+                                        <div className="d-flex align-items-center gap-1">
+                                            <Button
+                                                variant="dark"
+                                                className="d-flex"
+                                                onClick={() => {
+                                                    updateState({
+                                                        type: "ADD_ITEM",
+                                                        payload: {
+                                                            cloth_id:
+                                                                state.items
+                                                                    .length > 0
+                                                                    ? state
+                                                                          .items[
+                                                                          state
+                                                                              .items
+                                                                              .length -
+                                                                              1
+                                                                      ].cloth_id
+                                                                    : null,
+                                                            color_id: null,
+                                                            weight: "",
+                                                        },
+                                                    });
+                                                }}
+                                            >
+                                                <box-icon
+                                                    name="plus"
+                                                    color="white"
+                                                ></box-icon>
+                                            </Button>
+                                            <Button
+                                                variant="dark"
+                                                className="d-flex"
+                                                onClick={() => {
+                                                    updateState({
+                                                        type: "REMOVE_ITEM",
+                                                        payload: {
+                                                            index: index,
+                                                        },
+                                                    });
+                                                }}
+                                            >
+                                                <box-icon
+                                                    name="minus"
+                                                    color="white"
+                                                ></box-icon>
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </Table>
             </Modal.Body>

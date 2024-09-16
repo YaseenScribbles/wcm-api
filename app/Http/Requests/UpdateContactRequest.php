@@ -27,7 +27,7 @@ class UpdateContactRequest extends FormRequest
             'city' => 'nullable|string',
             'pincode' => 'nullable|string',
             'phone' => 'nullable|string',
-            'gst' => 'nullable|string|size:15',
+            'gst' => 'nullable|string|size:15|unique:contacts,gst,' . $this->route('contact.id'),
             'active' => 'boolean',
             'user_id' => 'required|exists:users,id'
         ];

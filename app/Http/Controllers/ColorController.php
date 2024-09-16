@@ -14,7 +14,10 @@ class ColorController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('all')) {
+        if ($request->has('all') && $request->has('filter')) {
+            $colors = Color::where('active', true)
+                ->where('name', 'like', '%' . $request->filter . '%')->get();
+        } else if ($request->has('all') && $request->all == 'true') {
             $colors = Color::where('active', true)->get();
         } else {
             $colors = Color::with('user')->paginate(10);
@@ -31,7 +34,7 @@ class ColorController extends Controller
             //code...
             $data = $request->validated();
             Color::create($data);
-            return response()->json(['message' => 'color created successfully']);
+            return response()->json(['message' => 'color created successfully',]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['message' => $th->getMessage()], 500);

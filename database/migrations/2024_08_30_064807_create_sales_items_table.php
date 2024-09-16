@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('cloth_id');
             $table->foreignId('color_id');
             $table->double('weight');
+            $table->double('rate');
+            $table->double('amount');
             $table->integer('s_no');
         });
     }

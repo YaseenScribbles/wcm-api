@@ -139,6 +139,7 @@ const Users: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
+                                                    hidden
                                                     onClick={() =>
                                                         deleteUser(user.id)
                                                     }

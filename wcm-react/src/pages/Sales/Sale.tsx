@@ -134,7 +134,10 @@ const Sale: React.FC = () => {
                                             ).toLocaleDateString()}
                                         </td>
                                         <td>{sale.contact.toUpperCase()}</td>
-                                        <td>{sale.remarks.toUpperCase()}</td>
+                                        <td>
+                                            {sale.remarks &&
+                                                sale.remarks.toUpperCase()}
+                                        </td>
                                         <td>{(+sale.weight).toFixed(2)}</td>
                                         <td>{sale.user.toUpperCase()}</td>
                                         <td>
@@ -150,12 +153,20 @@ const Sale: React.FC = () => {
                                                 ></box-icon>
                                                 <box-icon
                                                     onClick={() =>
-                                                        deleteSale(
-                                                            sale.id
-                                                        )
+                                                        deleteSale(sale.id)
                                                     }
                                                     name="x"
                                                     color="white"
+                                                ></box-icon>
+                                                <box-icon
+                                                    name="file"
+                                                    color="white"
+                                                    onClick={() => {
+                                                        window.open(
+                                                            `/sale/${sale.id}`,
+                                                            "_blank"
+                                                        );
+                                                    }}
                                                 ></box-icon>
                                             </div>
                                         </td>

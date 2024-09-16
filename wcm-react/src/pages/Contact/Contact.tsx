@@ -202,6 +202,7 @@ const Contact: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
+                                                    hidden
                                                     onClick={() =>
                                                         deleteContact(
                                                             contact.id
