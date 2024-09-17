@@ -1,4 +1,10 @@
-import { Card, Container, Table } from "react-bootstrap";
+import {
+    Card,
+    Container,
+    OverlayTrigger,
+    Table,
+    Tooltip,
+} from "react-bootstrap";
 import Header from "../../components/Header";
 import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
@@ -134,31 +140,42 @@ const Receipt: React.FC = () => {
                                             ).toLocaleDateString()}
                                         </td>
                                         <td>{receipt.contact.toUpperCase()}</td>
-                                        <td>{receipt.remarks && receipt.remarks.toUpperCase()}</td>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={
+                                                <Tooltip>
+                                                    {receipt.remarks &&
+                                                        receipt.remarks.toUpperCase()}
+                                                </Tooltip>
+                                            }
+                                        >
+                                            <td className="remarks">
+                                                {receipt.remarks &&
+                                                    receipt.remarks.toUpperCase()}
+                                            </td>
+                                        </OverlayTrigger>
                                         <td>{(+receipt.weight).toFixed(2)}</td>
                                         <td>{receipt.user.toUpperCase()}</td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
-                                                    <box-icon
-                                                        onClick={() => {
-                                                            setEditId(
-                                                                receipt.id
-                                                            );
-                                                            setEditMode(true);
-                                                            setShowModal(true);
-                                                        }}
-                                                        name="edit"
-                                                        color="white"
-                                                    ></box-icon>
-                                                    <box-icon
-                                                        onClick={() =>
-                                                            deleteReceipt(
-                                                                receipt.id
-                                                            )
-                                                        }
-                                                        name="x"
-                                                        color="white"
-                                                    ></box-icon>
+                                                <box-icon
+                                                    onClick={() => {
+                                                        setEditId(receipt.id);
+                                                        setEditMode(true);
+                                                        setShowModal(true);
+                                                    }}
+                                                    name="edit"
+                                                    color="white"
+                                                ></box-icon>
+                                                <box-icon
+                                                    onClick={() =>
+                                                        deleteReceipt(
+                                                            receipt.id
+                                                        )
+                                                    }
+                                                    name="x"
+                                                    color="white"
+                                                ></box-icon>
                                             </div>
                                         </td>
                                     </tr>

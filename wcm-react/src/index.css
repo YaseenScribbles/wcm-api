@@ -105,6 +105,13 @@ td.weight-input {
     max-width: 100px;
 }
 
+td.remarks {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+}
+
 @keyframes moveDown {
     0% {
         transform: translateY(-50px);

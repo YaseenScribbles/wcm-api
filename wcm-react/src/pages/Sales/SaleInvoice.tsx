@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         width: "100%",
         fontFamily: "Roboto",
         fontSize: "12",
-        fontWeight:"bold",
+        fontWeight: "bold",
         marginBottom: "5",
     },
 });
@@ -170,34 +170,36 @@ const SaleInvoice: React.FC = () => {
     const { addNotification } = useNotification();
 
     useEffect(() => {
-        try {
-            axios
-                .get(`${API_URL}report/${params.id}`, {
-                    headers: {
-                        Accept: "application/json",
-                    },
-                })
-                .then((resp) => {
-                    const { sale, saleItems } = resp.data;
-                    setSale(sale);
-                    setSaleItems(saleItems);
-                })
-                .catch((error: any) => {
-                    const {
-                        response: {
-                            data: { message },
+        if (+params.id! > 0) {
+            try {
+                axios
+                    .get(`${API_URL}report/${params.id}`, {
+                        headers: {
+                            Accept: "application/json",
                         },
-                    } = error;
-                    addNotification({
-                        message,
-                        type: "failure",
+                    })
+                    .then((resp) => {
+                        const { sale, saleItems } = resp.data;
+                        setSale(sale);
+                        setSaleItems(saleItems);
+                    })
+                    .catch((error: any) => {
+                        const {
+                            response: {
+                                data: { message },
+                            },
+                        } = error;
+                        addNotification({
+                            message,
+                            type: "failure",
+                        });
                     });
+            } catch (error: any) {
+                addNotification({
+                    message: error.message,
+                    type: "failure",
                 });
-        } catch (error: any) {
-            addNotification({
-                message: error.message,
-                type: "failure",
-            });
+            }
         }
     }, [params.id]);
 
@@ -236,7 +238,9 @@ const SaleInvoice: React.FC = () => {
                     <View>
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Name</Text>
-                            <Text style={styles.master}>{sale.name.toUpperCase()}</Text>
+                            <Text style={styles.master}>
+                                {sale.name.toUpperCase()}
+                            </Text>
                             <Text
                                 style={[
                                     styles.heading,
@@ -253,8 +257,20 @@ const SaleInvoice: React.FC = () => {
 
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Address</Text>
-                            <Text style={[styles.master,{ display:"flex", flexWrap:"nowrap", textOverflow:"ellipsis", overflow:"hidden" }]}>
-                                {sale.address && sale.address.toUpperCase()}, {sale.city && sale.city.toUpperCase()} -{sale.pincode}
+                            <Text
+                                style={[
+                                    styles.master,
+                                    {
+                                        display: "flex",
+                                        flexWrap: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        overflow: "hidden",
+                                    },
+                                ]}
+                            >
+                                {sale.address && sale.address.toUpperCase()},{" "}
+                                {sale.city && sale.city.toUpperCase()} -
+                                {sale.pincode && sale.pincode}
                             </Text>
                             <Text
                                 style={[
@@ -272,17 +288,21 @@ const SaleInvoice: React.FC = () => {
 
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Phone</Text>
-                            <Text style={styles.master}>{sale.phone}</Text>
+                            <Text style={styles.master}>{sale.phone && sale.phone}</Text>
                         </View>
 
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Gst</Text>
-                            <Text style={styles.master}>{sale.gst && sale.gst.toUpperCase()}</Text>
+                            <Text style={styles.master}>
+                                {sale.gst && sale.gst.toUpperCase()}
+                            </Text>
                         </View>
 
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Remarks</Text>
-                            <Text style={styles.master}>{sale.remarks && sale.remarks.toUpperCase()}</Text>
+                            <Text style={styles.master}>
+                                {sale.remarks && sale.remarks.toUpperCase()}
+                            </Text>
                         </View>
                     </View>
 

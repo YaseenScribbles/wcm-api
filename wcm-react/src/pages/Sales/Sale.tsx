@@ -1,4 +1,10 @@
-import { Card, Container, Table } from "react-bootstrap";
+import {
+    Card,
+    Container,
+    OverlayTrigger,
+    Table,
+    Tooltip,
+} from "react-bootstrap";
 import Header from "../../components/Header";
 import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
@@ -134,10 +140,20 @@ const Sale: React.FC = () => {
                                             ).toLocaleDateString()}
                                         </td>
                                         <td>{sale.contact.toUpperCase()}</td>
-                                        <td>
-                                            {sale.remarks &&
-                                                sale.remarks.toUpperCase()}
-                                        </td>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={
+                                                <Tooltip>
+                                                    {sale.remarks &&
+                                                        sale.remarks.toUpperCase()}
+                                                </Tooltip>
+                                            }
+                                        >
+                                            <td className="remarks">
+                                                {sale.remarks &&
+                                                    sale.remarks.toUpperCase()}
+                                            </td>
+                                        </OverlayTrigger>
                                         <td>{(+sale.weight).toFixed(2)}</td>
                                         <td>{sale.user.toUpperCase()}</td>
                                         <td>
