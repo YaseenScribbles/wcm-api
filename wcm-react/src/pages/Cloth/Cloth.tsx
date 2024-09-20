@@ -27,7 +27,7 @@ const Cloth = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext()
+    const { user } = useUserContext();
 
     const getCloths = async (page: number = 1) => {
         try {
@@ -130,8 +130,18 @@ const Cloth = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditId(cloth.id);
                                                         setEditMode(true);
                                                         setShowModal(true);
@@ -144,7 +154,11 @@ const Cloth = () => {
                                                     onClick={() =>
                                                         deleteCloth(cloth.id)
                                                     }
-                                                    name={cloth.active == "1" ? "minus" : "plus"}
+                                                    name={
+                                                        cloth.active == "1"
+                                                            ? "minus"
+                                                            : "plus"
+                                                    }
                                                     color="white"
                                                 ></box-icon>
                                             </div>

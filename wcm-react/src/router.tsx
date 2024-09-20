@@ -9,9 +9,9 @@ import Receipt from "./pages/Receipt/Receipt";
 import Sale from "./pages/Sales/Sale";
 import Stock from "./pages/Stock/Stock";
 import SaleInvoice from "./pages/Sales/SaleInvoice";
-import FourNotFive from "./pages/Error/405";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import FourNotThree from "./pages/Error/403";
 
 const router = createBrowserRouter([
     {
@@ -57,8 +57,8 @@ const router = createBrowserRouter([
                 element: <PrivateRoute menu="STOCK" element={<Stock />} />,
             },
             {
-                path: "/405",
-                element: <FourNotFive />,
+                path: "/403",
+                element: <FourNotThree />,
             },
         ],
     },

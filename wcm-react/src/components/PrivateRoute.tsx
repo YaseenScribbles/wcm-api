@@ -61,7 +61,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, menu }) => {
     return menus.includes(menu.toUpperCase()) ? (
         element
     ) : (
-        <Navigate to="/405" />
+        <Navigate to="/403" />
     );
 };
 

@@ -35,7 +35,7 @@ const Sale: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext()
+    const { user } = useUserContext();
 
     const getSales = async (page: number = 1) => {
         try {
@@ -161,8 +161,18 @@ const Sale: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditId(sale.id);
                                                         setEditMode(true);
                                                         setShowModal(true);
@@ -171,10 +181,20 @@ const Sale: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
-                                                    onClick={() =>
-                                                        deleteSale(sale.id)
-                                                    }
+                                                    onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
+                                                        deleteSale(sale.id);
+                                                    }}
                                                     name="x"
                                                     color="white"
                                                 ></box-icon>

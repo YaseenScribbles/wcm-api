@@ -138,8 +138,18 @@ const Users: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
-                                                    hidden={currentUser?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            currentUser?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditId(user.id);
                                                         setEditMode(true);
                                                         setShowModal(true);
@@ -160,8 +170,18 @@ const Users: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
-                                                    hidden={currentUser?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            currentUser?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditUser({
                                                             id: user.id,
                                                             name: user.name,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
-const FourNotFive: React.FC = () => {
+const FourNotThree: React.FC = () => {
     // Initialize height to a default value (58 or any known default navbar height)
     const [navbarHeight, setNavbarHeight] = useState(58);
 
@@ -17,9 +17,9 @@ const FourNotFive: React.FC = () => {
             className="d-flex flex-col justify-content-center align-items-center"
             style={{ height: `calc(100dvh - ${navbarHeight}px)`, width: "100dvw" }}
         >
-            <div className="h1 my-auto">405 | NOT ALLOWED</div>
+            <div className="h1 my-auto">403 | FORBIDDEN</div>
         </Container>
     );
 };
 
-export default FourNotFive;
+export default FourNotThree;

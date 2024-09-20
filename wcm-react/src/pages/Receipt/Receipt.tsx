@@ -35,7 +35,7 @@ const Receipt: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext()
+    const { user } = useUserContext();
 
     const getReceipts = async (page: number = 1) => {
         try {
@@ -161,8 +161,18 @@ const Receipt: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditId(receipt.id);
                                                         setEditMode(true);
                                                         setShowModal(true);
@@ -171,12 +181,22 @@ const Receipt: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
-                                                    onClick={() =>
+                                                    onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         deleteReceipt(
                                                             receipt.id
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                     name="x"
                                                     color="white"
                                                 ></box-icon>

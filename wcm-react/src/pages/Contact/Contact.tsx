@@ -195,8 +195,18 @@ const Contact: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
-                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
+                                                        if (
+                                                            user?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
                                                         setEditId(contact.id);
                                                         setEditMode(true);
                                                         setShowModal(true);

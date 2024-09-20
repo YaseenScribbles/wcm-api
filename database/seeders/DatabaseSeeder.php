@@ -8,6 +8,7 @@ use App\Models\Cloth;
 use App\Models\Color;
 use App\Models\Contact;
 use App\Models\MenuList;
+use App\Models\UserMenu;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -74,6 +75,45 @@ class DatabaseSeeder extends Seeder
             'path' => '/stock'
         ]);
 
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 1
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 2
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 3
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 4
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 5
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 6
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 7
+        ]);
+
+        UserMenu::create([
+            'user_id' => 1,
+            'menu_id' => 8
+        ]);
 
     }
 }
