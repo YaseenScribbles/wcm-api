@@ -10,9 +10,10 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $stock = DB::table("stock as s")
+
+        $sql = DB::table("stock as s")
             ->join('cloths as c', 'c.id', '=', 's.cloth_id')
             ->join('colors as col', 'col.id', '=', 's.color_id')
             ->select(
@@ -22,8 +23,13 @@ class ReportController extends Controller
             )
             ->where('s.weight', '>', 0)
             ->orderBy('c.name')
-            ->orderBy('col.name')
-            ->paginate(10);
+            ->orderBy('col.name');
+
+        if ($request->has('all')) {
+            $stock = $sql->get();
+        } else {
+            $stock = $sql->paginate(10);
+        }
 
         return response()->json(['stock' => $stock]);
     }
@@ -46,7 +52,7 @@ class ReportController extends Controller
             from sale_items si
             inner join cloths cl on cl.id = si.cloth_id
             inner join colors co on co.id = si.color_id
-            where si.sale_id = ". $id;
+            where si.sale_id = " . $id;
             $saleItems = DB::select($detailsSql);
 
             return response()->json(['sale' => $sale[0], 'saleItems' => $saleItems]);

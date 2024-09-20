@@ -4,6 +4,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
 import { API_URL } from "../../assets/common";
 import { useNotification } from "../../contexts/NotificationContext";
+import { useUserContext } from "../../contexts/UserContext";
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 const AddEditModal = lazy(() => import("../../pages/Color/AddEditColor"));
 
@@ -26,6 +27,7 @@ const Color = () => {
     const { addNotification } = useNotification();
     const [lastPage, setLastPage] = useState<number>(1);
     const [totalRecords, setTotalRecords] = useState(0);
+    const { user } = useUserContext()
 
     const deleteColor = async (id: number) => {
         try {
@@ -114,7 +116,9 @@ const Color = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td className="text-center" colSpan={5}>Loading...</td>
+                                <td className="text-center" colSpan={5}>
+                                    Loading...
+                                </td>
                             </tr>
                         ) : (
                             colors &&
@@ -133,6 +137,7 @@ const Color = () => {
                                     <td>
                                         <div className="d-flex align-items-center gap-1">
                                             <box-icon
+                                                hidden={user?.role !== "admin"}
                                                 onClick={() => {
                                                     setEditId(color.id);
                                                     setEditMode(true);

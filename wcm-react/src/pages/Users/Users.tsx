@@ -5,8 +5,10 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
 import { API_URL } from "../../assets/common";
 import { useNotification } from "../../contexts/NotificationContext";
+import { useUserContext } from "../../contexts/UserContext";
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 const AddEditModal = lazy(() => import("../../pages/Users/AddEditUser"));
+const UpdateUserMenu = lazy(() => import("../../pages/Users/UserMenu"));
 
 type User = {
     id: number;
@@ -26,6 +28,12 @@ const Users: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
+    const [showMenuModal, setShowMenuModal] = useState(false);
+    const { user: currentUser } = useUserContext();
+    const [editUser, setEditUser] = useState<{ id: number; name: string }>({
+        id: currentUser!.id,
+        name: currentUser!.name,
+    });
 
     const getUsers = async (page: number = 1) => {
         try {
@@ -130,6 +138,7 @@ const Users: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
+                                                    hidden={currentUser?.role !== "admin"}
                                                     onClick={() => {
                                                         setEditId(user.id);
                                                         setEditMode(true);
@@ -143,7 +152,23 @@ const Users: React.FC = () => {
                                                     onClick={() =>
                                                         deleteUser(user.id)
                                                     }
-                                                    name={user.active == "1" ? "minus" : "plus"}
+                                                    name={
+                                                        user.active == "1"
+                                                            ? "minus"
+                                                            : "plus"
+                                                    }
+                                                    color="white"
+                                                ></box-icon>
+                                                <box-icon
+                                                    hidden={currentUser?.role !== "admin"}
+                                                    onClick={() => {
+                                                        setEditUser({
+                                                            id: user.id,
+                                                            name: user.name,
+                                                        });
+                                                        setShowMenuModal(true);
+                                                    }}
+                                                    name="menu"
                                                     color="white"
                                                 ></box-icon>
                                             </div>
@@ -188,6 +213,20 @@ const Users: React.FC = () => {
                         setEditMode(false);
                     }}
                     editId={editId}
+                />
+            </Suspense>
+
+            <Suspense
+                fallback={
+                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                }
+            >
+                <UpdateUserMenu
+                    show={showMenuModal}
+                    onHide={() => {
+                        setShowMenuModal(false);
+                    }}
+                    user={editUser!}
                 />
             </Suspense>
         </Container>

@@ -10,6 +10,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
 import { API_URL } from "../../assets/common";
 import { useNotification } from "../../contexts/NotificationContext";
+import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditSale"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 
@@ -34,6 +35,7 @@ const Sale: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
+    const { user } = useUserContext()
 
     const getSales = async (page: number = 1) => {
         try {
@@ -159,6 +161,7 @@ const Sale: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
+                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
                                                         setEditId(sale.id);
                                                         setEditMode(true);
@@ -168,6 +171,7 @@ const Sale: React.FC = () => {
                                                     color="white"
                                                 ></box-icon>
                                                 <box-icon
+                                                    hidden={user?.role !== "admin"}
                                                     onClick={() =>
                                                         deleteSale(sale.id)
                                                     }

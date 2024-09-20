@@ -47,7 +47,7 @@ const Login = () => {
                 message,
                 type: "success",
             });
-            navigate("/");
+            navigate("/dashboard");
         } catch (error: any) {
             const {
                 response: {

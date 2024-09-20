@@ -36,4 +36,6 @@ Route::apiResource('receipt',ReceiptController::class);
 Route::apiResource('sale',SaleController::class);
 Route::get('/delivery-stock',[SaleController::class,'stock']);
 Route::apiResource('report',ReportController::class)->only(['index','show']);
+Route::get('/menus/{id}',[UserController::class,'menus']);
+Route::post('/user_menus',[UserController::class,'user_menus']);
 

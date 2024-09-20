@@ -23,7 +23,7 @@ const MyNavbar = () => {
         <>
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
-                    <Navbar.Brand href="/">WASTE CLOTH MANAGEMENT</Navbar.Brand>
+                    <Navbar.Brand href="/dashboard">WASTE CLOTH MANAGEMENT</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link
                             href="/user"

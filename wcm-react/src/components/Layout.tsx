@@ -1,6 +1,6 @@
 import { ToastContainer, Toast } from "react-bootstrap";
 import MyNavbar from "./MyNavbar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useNotification } from "../contexts/NotificationContext";
 import { useUserContext } from "../contexts/UserContext";
 import { useEffect } from "react";
@@ -9,10 +9,15 @@ const Layout = () => {
     const { notifications } = useNotification();
     const { user } = useUserContext();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (!user) {
             navigate("/login");
+        } else {
+            if (location.pathname === "/") {
+                navigate("/dashboard");
+            }
         }
     }, [user]);
 

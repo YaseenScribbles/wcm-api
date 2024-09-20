@@ -10,6 +10,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
 import { API_URL } from "../../assets/common";
 import { useNotification } from "../../contexts/NotificationContext";
+import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditContact"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 
@@ -37,6 +38,7 @@ const Contact: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
+    const { user } = useUserContext()
 
     const getContacts = async (page: number = 1) => {
         try {
@@ -193,6 +195,7 @@ const Contact: React.FC = () => {
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
+                                                    hidden={user?.role !== "admin"}
                                                     onClick={() => {
                                                         setEditId(contact.id);
                                                         setEditMode(true);

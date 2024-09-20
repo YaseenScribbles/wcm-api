@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Cloth;
 use App\Models\Color;
 use App\Models\Contact;
+use App\Models\MenuList;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,10 +26,54 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        Cloth::factory(5)->create();
+        // Cloth::factory(5)->create();
 
-        Color::factory(10)->create();
+        // Color::factory(10)->create();
 
-        Contact::factory(10)->create();
+        // Contact::factory(10)->create();
+
+        MenuList::create([
+            'name' => 'DASHBOARD',
+            'path' => '/dashboard'
+        ]);
+
+        MenuList::create([
+            'name' => 'USER',
+            'path' => '/user'
+        ]);
+
+        MenuList::create([
+            'name' => 'CLOTH',
+            'path' => '/cloth'
+        ]);
+
+        MenuList::create([
+            'name' => 'COLOR',
+            'path' => '/color'
+        ]);
+
+        MenuList::create([
+            'name' => 'CONTACT',
+            'path' => '/contact'
+        ]);
+
+        MenuList::create([
+            'name' => 'RECEIPT',
+            'path' => '/receipt'
+        ]);
+
+
+        MenuList::create([
+            'name' => 'SALE',
+            'path' => '/sale'
+        ]);
+
+
+        MenuList::create([
+            'name' => 'STOCK',
+            'path' => '/stock'
+        ]);
+
+
     }
 }

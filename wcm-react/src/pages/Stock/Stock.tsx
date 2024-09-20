@@ -7,11 +7,24 @@ import { useNotification } from "../../contexts/NotificationContext";
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { pdf } from "@react-pdf/renderer";
+import StockDocument from "./StockDocument";
 
 type Stock = {
     cloth: string;
     color: string;
     weight: string;
+};
+
+export const fetchStock = async () => {
+    try {
+        const response = await axios.get(`${API_URL}report?all=true`);
+        const { stock } = response.data;
+        return stock;
+    } catch (error: any) {
+        const message = error.response?.data?.message || "Error fetching stock";
+        throw new Error(message);
+    }
 };
 
 const Stock: React.FC = () => {
@@ -48,6 +61,17 @@ const Stock: React.FC = () => {
 
     const download = async () => {
         try {
+            let stocks: Stock[] = [];
+
+            try {
+                stocks = await fetchStock();
+            } catch (error: any) {
+                addNotification({
+                    message: error.message,
+                    type: "failure",
+                });
+            }
+
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("Stock");
 
@@ -93,8 +117,25 @@ const Stock: React.FC = () => {
         <Container>
             <Header
                 title="STOCK"
-                buttonText="DOWNLOAD"
+                buttonText="EXCEL"
                 buttonFunction={download}
+                secondButtonText="PDF"
+                secondButtonFunction={async () => {
+                    let stocks: Stock[] = [];
+
+                    try {
+                        stocks = await fetchStock();
+                    } catch (error: any) {
+                        addNotification({
+                            message: error.message,
+                            type: "failure",
+                        });
+                    }
+                    const blob = await pdf(
+                        <StockDocument stock={stocks} />
+                    ).toBlob();
+                    saveAs(blob, "stock-report.pdf");
+                }}
                 isReport
             />
             <hr />

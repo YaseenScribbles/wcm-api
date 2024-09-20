@@ -9,6 +9,9 @@ import Receipt from "./pages/Receipt/Receipt";
 import Sale from "./pages/Sales/Sale";
 import Stock from "./pages/Stock/Stock";
 import SaleInvoice from "./pages/Sales/SaleInvoice";
+import FourNotFive from "./pages/Error/405";
+import PrivateRoute from "./components/PrivateRoute";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -20,32 +23,42 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             {
+                path: "/dashboard",
+                element: (
+                    <PrivateRoute menu="DASHBOARD" element={<Dashboard />} />
+                ),
+            },
+            {
                 path: "/user",
-                element: <Users />,
+                element: <PrivateRoute menu="USER" element={<Users />} />,
             },
             {
                 path: "/cloth",
-                element: <Cloth />,
+                element: <PrivateRoute menu="CLOTH" element={<Cloth />} />,
             },
             {
                 path: "/color",
-                element: <Color />,
+                element: <PrivateRoute menu="COLOR" element={<Color />} />,
             },
             {
                 path: "/contact",
-                element: <Contact />,
+                element: <PrivateRoute menu="CONTACT" element={<Contact />} />,
             },
             {
                 path: "/receipt",
-                element: <Receipt />,
+                element: <PrivateRoute menu="RECEIPT" element={<Receipt />} />,
             },
             {
                 path: "/sale",
-                element: <Sale />,
+                element: <PrivateRoute menu="SALE" element={<Sale />} />,
             },
             {
                 path: "/stock",
-                element: <Stock />,
+                element: <PrivateRoute menu="STOCK" element={<Stock />} />,
+            },
+            {
+                path: "/405",
+                element: <FourNotFive />,
             },
         ],
     },

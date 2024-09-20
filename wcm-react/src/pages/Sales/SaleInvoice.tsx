@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     heading: {
         fontFamily: "Roboto",
         fontSize: 12,
-        width: "75",
+        width: "55",
     },
     colon: {
         fontSize: "10",
