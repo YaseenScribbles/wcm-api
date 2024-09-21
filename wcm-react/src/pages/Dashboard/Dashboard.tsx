@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Card, Container } from "react-bootstrap";
 import Header from "../../components/Header";
 import { fetchStock } from "../Stock/Stock";
@@ -19,14 +19,17 @@ const Dashboard = () => {
     const { addNotification } = useNotification();
 
     useEffect(() => {
+        getStock();
+    }, []);
+
+    useLayoutEffect(() => {
         const navbar: HTMLElement | null = document.querySelector(".navbar");
         const header: HTMLElement | null = document.querySelector(".title");
         const height = navbar ? navbar.offsetHeight : 58;
         const headerHeight = header ? header.offsetHeight : 59.59;
         setNavbarHeight(height);
         setHeaderHeight(headerHeight);
-        getStock();
-    }, []);
+    },[])
 
     const getStock = async () => {
         try {

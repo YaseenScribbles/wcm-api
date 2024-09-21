@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -42,7 +43,13 @@ class AuthController extends Controller
         try {
             //code...
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-                return response()->json(['message' => 'login success','user' => Auth::user()]);
+                $user_menus = DB::table('user_menus as um')
+                ->join('users as u', 'u.id', '=', 'um.user_id')
+                ->join('menu_list as ml', 'ml.id', '=', 'um.menu_id')
+                ->where('u.id', Auth::user()->id)
+                ->select('ml.name')
+                ->get();
+                return response()->json(['message' => 'login success','user' => Auth::user(), 'user_menus' => $user_menus]);
             } else {
                 return response()->json(['message' => 'enter valid credentials'],400);
             }

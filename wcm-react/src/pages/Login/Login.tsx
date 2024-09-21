@@ -12,8 +12,12 @@ type User = {
     password: string;
 };
 
+type Menu = {
+    name: string;
+};
+
 const Login = () => {
-    const { user, setUser } = useUserContext();
+    const { user, setUser, setMenus } = useUserContext();
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState<User>({
         email: "",
@@ -36,13 +40,17 @@ const Login = () => {
                     Accept: "application/json",
                 },
             });
-            const { message, user } = response.data;
+            const { message, user, user_menus } = response.data;
             setUser({
                 id: user.id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
             });
+
+            const menus = user_menus.map((menu: Menu) => menu.name);
+            setMenus(menus);
+
             addNotification({
                 message,
                 type: "success",

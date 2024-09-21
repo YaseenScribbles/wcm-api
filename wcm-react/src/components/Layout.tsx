@@ -21,6 +21,17 @@ const Layout = () => {
         }
     }, [user]);
 
+    // if (loading) {
+    //     return (
+    //         <div
+    //             style={{ height: "100dvh", width: "100dvw" }}
+    //             className="d-flex justify-content-center align-items-center"
+    //         >
+    //             <box-icon name="loader" animation="spin" size="lg"></box-icon>
+    //         </div>
+    //     );
+    // }
+
     return (
         <>
             <MyNavbar />
@@ -32,7 +43,7 @@ const Layout = () => {
                 <ToastContainer
                     className="p-3"
                     position={"top-end"}
-                    style={{ zIndex: 1 }}
+                    style={{ zIndex: 3000 }}
                 >
                     {notifications.length > 0 &&
                         notifications.map((notification, index) => {

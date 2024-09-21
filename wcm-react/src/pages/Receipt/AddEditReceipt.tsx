@@ -408,8 +408,9 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
             }}
             centered
             scrollable
-            size="xl"
             contentClassName="custom-modal"
+            dialogClassName="center"
+            size="xl"
         >
             <Modal.Header closeButton>
                 <div className="h5">

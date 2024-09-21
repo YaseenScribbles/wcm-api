@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 const FourNotThree: React.FC = () => {
     // Initialize height to a default value (58 or any known default navbar height)
     const [navbarHeight, setNavbarHeight] = useState(58);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const navbar: HTMLElement | null = document.querySelector('.navbar');
         const height = navbar ? navbar.offsetHeight : 58;
         setNavbarHeight(height); // Update state with the actual navbar height
