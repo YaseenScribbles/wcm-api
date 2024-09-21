@@ -161,3 +161,14 @@ tspan {
 }
 
 
+@media screen and (max-width:1366px) {
+    .glass-card {
+        width: 25vw !important;  /* Adjust card width */
+        height: 60vh !important; /* Adjust card height */
+    }
+
+    .app-title {
+        font-size: 2.5rem !important;
+    }
+}
+

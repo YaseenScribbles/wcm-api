@@ -75,8 +75,8 @@ const Login = () => {
             }}
         >
             <div
-                className="glass-card d-flex flex-column justify-content-center align-items-center p-4 rounded"
-                style={{ width: "20%", height: "45%" }}
+                className="glass-card d-flex flex-column justify-content-center align-items-center p-xl-4 p-lg-3 rounded"
+                style={{ width: "20dvw", height: "45dvh" }}
             >
                 {loading && (
                     <div className="loader w-100 text-end">
@@ -88,7 +88,7 @@ const Login = () => {
                     </div>
                 )}
                 <div className="app-title mb-3 text-light">W C M</div>
-                <div className="login-form w-75 mt-5">
+                <div className="login-form w-75 mt-xl-5">
                     <Form.Control
                         className="mb-3"
                         type="email"
@@ -115,11 +115,18 @@ const Login = () => {
                         }
                         required
                     />
-                    <Button variant="dark" className="w-100 mb-3" onClick={login}>
+                    <Button
+                        variant="dark"
+                        className="w-100 mb-2"
+                        onClick={login}
+                    >
                         Log In
                     </Button>
                     {notifications.length > 0 && (
-                        <p className="error-msg text-light w-100 nowrap" role="alert">
+                        <p
+                            className="error-msg text-light w-100 nowrap mb-1"
+                            role="alert"
+                        >
                             {notifications[0].message.toUpperCase()}
                         </p>
                     )}
