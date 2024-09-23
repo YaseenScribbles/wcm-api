@@ -38,4 +38,6 @@ Route::get('/delivery-stock',[SaleController::class,'stock']);
 Route::apiResource('report',ReportController::class)->only(['index','show']);
 Route::get('/menus/{id}',[UserController::class,'menus']);
 Route::post('/user_menus',[UserController::class,'user_menus']);
+Route::get('/user-rights/{id}',[UserController::class,'user_rights']);
+Route::post('/user-rights',[UserController::class,'update_user_rights']);
 

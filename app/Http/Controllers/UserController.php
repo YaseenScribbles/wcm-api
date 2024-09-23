@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\UserMenu;
+use App\Models\UserRight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -120,6 +121,59 @@ class UserController extends Controller
             return response()->json(['message' => 'user updated successfully']);
         } catch (\Throwable $th) {
             //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
+    public function user_rights(int $id)
+    {
+        try {
+            //code...
+            $rights = DB::table('menu_list as ml')
+                ->leftJoin('user_rights as ur', function ($join) use ($id) {
+                    $join->on('ml.id', '=', 'ur.menu_id')
+                        ->where('ur.user_id', '=', $id);
+                })
+                ->select('ml.id', 'ml.name', 'ur.edit', 'ur.`delete`')
+                ->get();
+
+            return response()->json(['rights' => $rights]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
+    public function update_user_rights(Request $request)
+    {
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'rights' => 'array',
+            'rights.*.menu_id' => 'exists:menu_list,id',
+            'rights.*.edit' => 'boolean',
+            'rights.*.delete' => 'boolean'
+        ]);
+        try {
+            //code...
+            DB::beginTransaction();
+
+            UserRight::where('user_id', $request->user_id)->delete();
+
+            foreach ($request->rights as $value) {
+                UserRight::create([
+                    'user_id' => $request->user_id,
+                    'menu_id' => $value['menu_id'],
+                    'edit' => $value['edit'],
+                    'delete' => $value['delete']
+                ]);
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'user rights updated']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
             return response()->json(['message' => $th->getMessage()], 500);
         }
     }
