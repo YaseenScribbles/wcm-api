@@ -134,7 +134,7 @@ class UserController extends Controller
                     $join->on('ml.id', '=', 'ur.menu_id')
                         ->where('ur.user_id', '=', $id);
                 })
-                ->select('ml.id', 'ml.name', 'ur.edit', 'ur.`delete`')
+                ->select('ml.id', 'ml.name', 'ur.edit', 'ur.[delete]')
                 ->get();
 
             return response()->json(['rights' => $rights]);
