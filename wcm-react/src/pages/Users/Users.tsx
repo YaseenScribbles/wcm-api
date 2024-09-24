@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, Container, Table } from "react-bootstrap";
+import {
+    Card,
+    Container,
+    OverlayTrigger,
+    Table,
+    Tooltip,
+} from "react-bootstrap";
 import Header from "../../components/Header";
 import { useEffect, useState, lazy, Suspense } from "react";
 import axios from "axios";
@@ -140,25 +146,38 @@ const Users: React.FC = () => {
                                         </td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
-                                                <box-icon
-                                                    onClick={() => {
-                                                        if (
-                                                            !menus.find(menu => menu.name === "USER")?.edit
-                                                        ) {
-                                                            addNotification({
-                                                                message:
-                                                                    "ACCESS RESTRICTED",
-                                                                type: "failure",
-                                                            });
-                                                            return;
-                                                        }
-                                                        setEditId(user.id);
-                                                        setEditMode(true);
-                                                        setShowModal(true);
-                                                    }}
-                                                    name="edit"
-                                                    color="white"
-                                                ></box-icon>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>Edit</Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        onClick={() => {
+                                                            if (
+                                                                !menus.find(
+                                                                    (menu) =>
+                                                                        menu.name ===
+                                                                        "USER"
+                                                                )?.edit
+                                                            ) {
+                                                                addNotification(
+                                                                    {
+                                                                        message:
+                                                                            "ACCESS RESTRICTED",
+                                                                        type: "failure",
+                                                                    }
+                                                                );
+                                                                return;
+                                                            }
+                                                            setEditId(user.id);
+                                                            setEditMode(true);
+                                                            setShowModal(true);
+                                                        }}
+                                                        name="edit"
+                                                        color="white"
+                                                    ></box-icon>
+                                                </OverlayTrigger>
                                                 <box-icon
                                                     hidden
                                                     onClick={() =>
@@ -171,45 +190,79 @@ const Users: React.FC = () => {
                                                     }
                                                     color="white"
                                                 ></box-icon>
-                                                <box-icon
-                                                    onClick={() => {
-                                                        if (
-                                                            !menus.find(menu => menu.name === "USER")?.edit
-                                                        ) {
-                                                            addNotification({
-                                                                message:
-                                                                    "ACCESS RESTRICTED",
-                                                                type: "failure",
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>Menus</Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        onClick={() => {
+                                                            if (
+                                                                !menus.find(
+                                                                    (menu) =>
+                                                                        menu.name ===
+                                                                        "USER"
+                                                                )?.edit
+                                                            ) {
+                                                                addNotification(
+                                                                    {
+                                                                        message:
+                                                                            "ACCESS RESTRICTED",
+                                                                        type: "failure",
+                                                                    }
+                                                                );
+                                                                return;
+                                                            }
+                                                            setEditUser({
+                                                                id: user.id,
+                                                                name: user.name,
                                                             });
-                                                            return;
-                                                        }
-                                                        setEditUser({
-                                                            id: user.id,
-                                                            name: user.name,
-                                                        });
-                                                        setShowMenuModal(true);
-                                                    }}
-                                                    name="menu"
-                                                    color="white"
-                                                ></box-icon>
-                                                <box-icon
-                                                    onClick={() => {
-                                                        if (
-                                                            !menus.find(menu => menu.name === "USER")?.edit
-                                                        ) {
-                                                            addNotification({
-                                                                message:
-                                                                    "ACCESS RESTRICTED",
-                                                                type: "failure",
-                                                            });
-                                                            return;
-                                                        }
-                                                        setRightsUserId(user.id);
-                                                        setShowRightsModal(true);
-                                                    }}
-                                                    name="list-check"
-                                                    color="white"
-                                                ></box-icon>
+                                                            setShowMenuModal(
+                                                                true
+                                                            );
+                                                        }}
+                                                        name="menu"
+                                                        color="white"
+                                                    ></box-icon>
+                                                </OverlayTrigger>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>
+                                                            Rights
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        onClick={() => {
+                                                            if (
+                                                                !menus.find(
+                                                                    (menu) =>
+                                                                        menu.name ===
+                                                                        "USER"
+                                                                )?.edit
+                                                            ) {
+                                                                addNotification(
+                                                                    {
+                                                                        message:
+                                                                            "ACCESS RESTRICTED",
+                                                                        type: "failure",
+                                                                    }
+                                                                );
+                                                                return;
+                                                            }
+                                                            setRightsUserId(
+                                                                user.id
+                                                            );
+                                                            setShowRightsModal(
+                                                                true
+                                                            );
+                                                        }}
+                                                        name="list-check"
+                                                        color="white"
+                                                    ></box-icon>
+                                                </OverlayTrigger>
                                             </div>
                                         </td>
                                     </tr>
