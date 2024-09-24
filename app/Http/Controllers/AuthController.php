@@ -42,21 +42,24 @@ class AuthController extends Controller
 
         try {
             //code...
-            if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user_menus = DB::table('user_menus as um')
-                ->join('users as u', 'u.id', '=', 'um.user_id')
-                ->join('menu_list as ml', 'ml.id', '=', 'um.menu_id')
-                ->where('u.id', Auth::user()->id)
-                ->select('ml.name')
-                ->get();
-                return response()->json(['message' => 'login success','user' => Auth::user(), 'user_menus' => $user_menus]);
+                    ->join('user_rights as ur', function ($join) {
+                        $join->on('ur.menu_id', '=', 'um.menu_id')
+                            ->where('ur.user_id', '=', 'um.user_id');
+                    })
+                    ->join('menu_list as ml', 'ml.id', '=', 'ur.menu_id')
+                    ->where('ur.user_id', '=', Auth::user()->id)
+                    ->select('ml.name', 'ur.edit', 'ur.delete')
+                    ->get();
+
+                return response()->json(['message' => 'login success', 'user' => Auth::user(), 'user_menus' => $user_menus]);
             } else {
-                return response()->json(['message' => 'enter valid credentials'],400);
+                return response()->json(['message' => 'enter valid credentials'], 400);
             }
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json(['message' => $th->getMessage()],500);
+            return response()->json(['message' => $th->getMessage()], 500);
         }
-
     }
 }

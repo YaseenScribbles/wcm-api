@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type User = {
@@ -8,12 +7,18 @@ type User = {
     role: string;
 };
 
+type Menu = {
+    name: string;
+    edit: boolean;
+    delete: boolean;
+};
+
 type UserContextType = {
     user: User | null;
     setUser: (user: User) => void;
     removeUser: () => void;
-    menus: string[];
-    setMenus: (menus: string[]) => void;
+    menus: Menu[];
+    setMenus: (menus: Menu[]) => void;
 };
 
 const UserContext = createContext<UserContextType>({
@@ -34,30 +39,28 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         let user: User | null = null;
         if (savedUser) {
             user = JSON.parse(savedUser);
-
         }
         return user;
     };
 
     const getMenus = () => {
         const savedMenus = localStorage.getItem("wcm_menus");
-        let menus: string[] = [];
+        let menus: Menu[] = [];
         if (savedMenus) {
             menus = JSON.parse(savedMenus);
-
         }
         return menus;
     };
 
     const [user, _setUser] = useState<User | null>(getUser());
-    const [menus, _setMenus] = useState<string[]>(getMenus());
+    const [menus, _setMenus] = useState<Menu[]>(getMenus());
 
     const setUser = (user: User) => {
         _setUser(user);
         localStorage.setItem("wcm_user", JSON.stringify(user));
     };
 
-    const setMenus = (menu: string[]) => {
+    const setMenus = (menu: Menu[]) => {
         _setMenus(menu);
         localStorage.setItem("wcm_menus", JSON.stringify(menu));
     };
@@ -75,7 +78,7 @@ const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         if (user) {
             _setUser(JSON.parse(user));
         }
-        if(menus) _setMenus(JSON.parse(menus))
+        if (menus) _setMenus(JSON.parse(menus));
     }, []);
 
     return (

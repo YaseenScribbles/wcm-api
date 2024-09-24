@@ -35,7 +35,7 @@ const Sale: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext();
+    const { menus } = useUserContext();
 
     const getSales = async (page: number = 1) => {
         try {
@@ -163,8 +163,7 @@ const Sale: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "SALE")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -183,8 +182,7 @@ const Sale: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "SALE")?.delete
                                                         ) {
                                                             addNotification({
                                                                 message:

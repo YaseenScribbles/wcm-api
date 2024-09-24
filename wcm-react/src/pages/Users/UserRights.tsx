@@ -82,6 +82,7 @@ const UserRights: React.FC<UserRightProps> = ({ userId, onHide, show }) => {
 
     const getRights = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(
                 `${API_URL}user-rights/${userId}`,
                 { headers: { Accept: "application/json" } }

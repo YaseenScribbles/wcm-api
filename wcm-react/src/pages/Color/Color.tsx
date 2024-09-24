@@ -27,7 +27,7 @@ const Color = () => {
     const { addNotification } = useNotification();
     const [lastPage, setLastPage] = useState<number>(1);
     const [totalRecords, setTotalRecords] = useState(0);
-    const { user } = useUserContext()
+    const { menus } = useUserContext()
 
     const deleteColor = async (id: number) => {
         try {
@@ -139,8 +139,7 @@ const Color = () => {
                                             <box-icon
                                                 onClick={() => {
                                                     if (
-                                                        user?.role !==
-                                                        "admin"
+                                                        !menus.find(menu => menu.name === "COLOR")?.edit
                                                     ) {
                                                         addNotification({
                                                             message:

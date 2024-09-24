@@ -30,7 +30,7 @@ const Users: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
     const [showMenuModal, setShowMenuModal] = useState(false);
-    const { user: currentUser } = useUserContext();
+    const { user: currentUser, menus } = useUserContext();
     const [editUser, setEditUser] = useState<{ id: number; name: string }>({
         id: currentUser!.id,
         name: currentUser!.name,
@@ -143,8 +143,7 @@ const Users: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            currentUser?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "USER")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -175,8 +174,7 @@ const Users: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            currentUser?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "USER")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -197,8 +195,7 @@ const Users: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            currentUser?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "USER")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:

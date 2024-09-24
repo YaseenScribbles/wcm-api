@@ -35,7 +35,7 @@ const Receipt: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext();
+    const { menus } = useUserContext();
 
     const getReceipts = async (page: number = 1) => {
         try {
@@ -163,8 +163,7 @@ const Receipt: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "RECEIPT")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -183,8 +182,7 @@ const Receipt: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "RECEIPT")?.delete
                                                         ) {
                                                             addNotification({
                                                                 message:

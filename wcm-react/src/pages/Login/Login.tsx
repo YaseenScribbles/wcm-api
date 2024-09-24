@@ -14,6 +14,8 @@ type User = {
 
 type Menu = {
     name: string;
+    edit: string;
+    delete: string;
 };
 
 const Login = () => {
@@ -48,7 +50,11 @@ const Login = () => {
                 role: user.role,
             });
 
-            const menus = user_menus.map((menu: Menu) => menu.name);
+            const menus = user_menus.map((menu: Menu) => ({
+                name: menu.name,
+                edit: menu.edit == "1" ? true : false,
+                delete: menu.delete == "1" ? true : false,
+            }));
             setMenus(menus);
 
             addNotification({

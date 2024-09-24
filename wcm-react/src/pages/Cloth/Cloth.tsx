@@ -27,7 +27,7 @@ const Cloth = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext();
+    const { menus } = useUserContext();
 
     const getCloths = async (page: number = 1) => {
         try {
@@ -132,8 +132,7 @@ const Cloth = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "CLOTH")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:

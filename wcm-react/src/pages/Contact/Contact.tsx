@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { user } = useUserContext()
+    const { menus } = useUserContext()
 
     const getContacts = async (page: number = 1) => {
         try {
@@ -197,8 +197,7 @@ const Contact: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            user?.role !==
-                                                            "admin"
+                                                            !menus.find(menu => menu.name === "CONTACT")?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:

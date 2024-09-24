@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const MyNavbar = () => {
+
+
     const { user, removeUser, menus } = useUserContext();
     const [activeMenu, setActiveMenu] = useState("");
     const navigate = useNavigate();
@@ -30,49 +32,49 @@ const MyNavbar = () => {
                         <Nav.Link
                             href="/user"
                             active={activeMenu === "user"}
-                            hidden={!menus.includes("USER")}
+                            hidden={menus.findIndex(menu => menu.name === "USER") === -1}
                         >
                             USER
                         </Nav.Link>
                         <Nav.Link
                             href="/cloth"
                             active={activeMenu === "cloth"}
-                            hidden={!menus.includes("CLOTH")}
+                            hidden={menus.findIndex(menu => menu.name === "CLOTH") === -1}
                         >
                             CLOTH
                         </Nav.Link>
                         <Nav.Link
                             href="/color"
                             active={activeMenu === "color"}
-                            hidden={!menus.includes("COLOR")}
+                            hidden={menus.findIndex(menu => menu.name === "COLOR") === -1}
                         >
                             COLOR
                         </Nav.Link>
                         <Nav.Link
                             href="/contact"
                             active={activeMenu === "contact"}
-                            hidden={!menus.includes("CONTACT")}
+                            hidden={menus.findIndex(menu => menu.name === "CONTACT") === -1}
                         >
                             CONTACT
                         </Nav.Link>
                         <Nav.Link
                             href="/receipt"
                             active={activeMenu === "receipt"}
-                            hidden={!menus.includes("RECEIPT")}
+                            hidden={menus.findIndex(menu => menu.name === "RECEIPT") === -1}
                         >
                             RECEIPT
                         </Nav.Link>
                         <Nav.Link
                             href="/sale"
                             active={activeMenu === "sale"}
-                            hidden={!menus.includes("SALE")}
+                            hidden={menus.findIndex(menu => menu.name === "SALE") === -1}
                         >
                             SALE
                         </Nav.Link>
                         <Nav.Link
                             href="/stock"
                             active={activeMenu === "stock"}
-                            hidden={!menus.includes("STOCK")}
+                            hidden={menus.findIndex(menu => menu.name === "STOCK") === -1}
                         >
                             STOCK
                         </Nav.Link>
