@@ -9,7 +9,6 @@ use App\Models\UserMenu;
 use App\Models\UserRight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -163,12 +162,6 @@ class UserController extends Controller
             UserRight::where('user_id', $request->user_id)->delete();
 
             foreach ($request->rights as $value) {
-                Log::info($request->user_id);
-                Log::info($value['menu_id']);
-                Log::info($value['edit']);
-                Log::info($value['delete']);
-
-
                 UserRight::create([
                     'user_id' => $request->user_id,
                     'menu_id' => $value['menu_id'],

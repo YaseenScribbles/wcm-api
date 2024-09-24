@@ -9,7 +9,7 @@ class UserRight extends Model
 {
     use HasFactory;
 
-    protected $table = [
+    protected $fillable = [
         'user_id',
         'menu_id',
         'edit',
