@@ -43,16 +43,12 @@ class AuthController extends Controller
         try {
             //code...
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user_menus = DB::table('user_menus as um')
-                    ->join('user_rights as ur', function ($join) {
-                        $join->on('ur.menu_id', '=', 'um.menu_id')
-                            ->where('ur.user_id', '=', 'um.user_id');
-                    })
-                    ->join('menu_list as ml', 'ml.id', '=', 'ur.menu_id')
-                    ->where('ur.user_id', '=', Auth::user()->id)
-                    ->select('ml.name', 'ur.edit', 'ur.delete')
-                    ->get();
-
+                $sql = "select ml.name,ur.edit, ur.[delete]
+                from user_menus um
+                inner join user_rights ur on um.user_id = ur.user_id and um.menu_id = ur.menu_id
+                inner join menu_list ml on um.menu_id = ml.id
+                where um.user_id = " . Auth::user()->id;
+                $user_menus = DB::select($sql);
                 return response()->json(['message' => 'login success', 'user' => Auth::user(), 'user_menus' => $user_menus]);
             } else {
                 return response()->json(['message' => 'enter valid credentials'], 400);

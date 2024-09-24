@@ -56,7 +56,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, menu }) => {
     // }
 
     // Check if the user's role is in the allowed roles for this route
-    return menus.includes(menu.toUpperCase()) ? (
+    return menus.map((menu) => menu.name).includes(menu.toUpperCase()) ? (
         element
     ) : (
         <Navigate to="/403" />
