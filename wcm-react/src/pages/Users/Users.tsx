@@ -9,6 +9,7 @@ import { useUserContext } from "../../contexts/UserContext";
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 const AddEditModal = lazy(() => import("../../pages/Users/AddEditUser"));
 const UpdateUserMenu = lazy(() => import("../../pages/Users/UserMenu"));
+const RightModal = lazy(() => import("../../pages/Users/UserRights"));
 
 type User = {
     id: number;
@@ -34,6 +35,8 @@ const Users: React.FC = () => {
         id: currentUser!.id,
         name: currentUser!.name,
     });
+    const [rightsUserId, setRightsUserId] = useState<number>();
+    const [showRightsModal, setShowRightsModal] = useState(false);
 
     const getUsers = async (page: number = 1) => {
         try {
@@ -191,6 +194,25 @@ const Users: React.FC = () => {
                                                     name="menu"
                                                     color="white"
                                                 ></box-icon>
+                                                <box-icon
+                                                    onClick={() => {
+                                                        if (
+                                                            currentUser?.role !==
+                                                            "admin"
+                                                        ) {
+                                                            addNotification({
+                                                                message:
+                                                                    "ACCESS RESTRICTED",
+                                                                type: "failure",
+                                                            });
+                                                            return;
+                                                        }
+                                                        setRightsUserId(user.id);
+                                                        setShowRightsModal(true);
+                                                    }}
+                                                    name="list-check"
+                                                    color="white"
+                                                ></box-icon>
                                             </div>
                                         </td>
                                     </tr>
@@ -247,6 +269,19 @@ const Users: React.FC = () => {
                         setShowMenuModal(false);
                     }}
                     user={editUser!}
+                />
+            </Suspense>
+            <Suspense
+                fallback={
+                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                }
+            >
+                <RightModal
+                    show={showRightsModal}
+                    onHide={() => {
+                        setShowRightsModal(false);
+                    }}
+                    userId={rightsUserId!}
                 />
             </Suspense>
         </Container>
