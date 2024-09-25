@@ -35,9 +35,10 @@ const Dashboard = () => {
         try {
             setLoading(true);
             let data: Stock[] = await fetchStock();
-            const stocks: Stock[] = data.sort(
-                (a: Stock, b: Stock) => +b.weight - +a.weight
-            ).slice(0,10);
+            const stocks: Stock[] = data
+                .sort((a: Stock, b: Stock) => +b.weight - +a.weight)
+                .slice(0, 10)
+                .sort(() => Math.random() - 0.5);
             setStocks(stocks);
         } catch (error: any) {
             addNotification({
