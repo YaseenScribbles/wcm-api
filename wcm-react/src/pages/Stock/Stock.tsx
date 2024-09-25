@@ -165,7 +165,7 @@ const Stock: React.FC = () => {
                                         </td>
                                         <td>{stock.cloth.toUpperCase()}</td>
                                         <td>{stock.color.toUpperCase()}</td>
-                                        <td>{stock.weight}</td>
+                                        <td>{(+stock.weight).toFixed(2)}</td>
                                     </tr>
                                 );
                             })

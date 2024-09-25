@@ -259,9 +259,9 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 let saleItem: SaleItem = {
                     cloth_id: +sale.cloth_id!,
                     color_id: +sale.color_id!,
-                    weight: sale.weight,
-                    rate: sale.rate,
-                    amount: sale.amount,
+                    weight: (+sale.weight).toFixed(2),
+                    rate: (+sale.rate).toFixed(2),
+                    amount: (+sale.amount).toFixed(2),
                 };
                 saleItems.push(saleItem);
             });
@@ -269,9 +269,9 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 let stockItem: SaleItem = {
                     cloth_id: +sto.cloth_id!,
                     color_id: +sto.color_id!,
-                    weight: sto.weight,
-                    rate: sto.rate,
-                    amount: sto.amount,
+                    weight: (+sto.weight).toFixed(2),
+                    rate: (+sto.rate).toFixed(2),
+                    amount: (+sto.amount).toFixed(2),
                 };
                 stockItems.push(stockItem);
             });
@@ -379,7 +379,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 let saleItem: SaleItem = {
                     cloth_id: +e.cloth_id!,
                     color_id: +e.color_id!,
-                    weight: e.weight,
+                    weight: (+e.weight).toFixed(2),
                     rate: "",
                     amount: "",
                 };

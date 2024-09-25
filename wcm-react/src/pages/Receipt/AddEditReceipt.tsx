@@ -237,7 +237,7 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                     payload: {
                         cloth_id: item.cloth_id,
                         color_id: item.color_id,
-                        weight: item.weight,
+                        weight: (+item.weight).toFixed(2),
                     },
                 });
             });

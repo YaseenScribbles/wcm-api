@@ -29,12 +29,15 @@ const Dashboard = () => {
         const headerHeight = header ? header.offsetHeight : 59.59;
         setNavbarHeight(height);
         setHeaderHeight(headerHeight);
-    },[])
+    }, []);
 
     const getStock = async () => {
         try {
             setLoading(true);
-            const stocks = await fetchStock();
+            let data: Stock[] = await fetchStock();
+            const stocks: Stock[] = data.sort(
+                (a: Stock, b: Stock) => +b.weight - +a.weight
+            ).slice(0,10);
             setStocks(stocks);
         } catch (error: any) {
             addNotification({
@@ -80,7 +83,7 @@ const Dashboard = () => {
                                 text={"white"}
                                 className="my-2"
                             >
-                                <Card.Header>STOCK</Card.Header>
+                                <Card.Header>STOCK - TOP 10</Card.Header>
                                 <Card.Body>
                                     <StockChart stock={stocks} />
                                 </Card.Body>
