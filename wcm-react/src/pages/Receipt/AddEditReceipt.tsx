@@ -196,6 +196,13 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                 message: data.message,
                 type: "success",
             });
+            const message = `No : ${data.id}, Date : ${new Date(
+                data.date
+            ).toLocaleDateString()}`;
+            addNotification({
+                message,
+                type: "success",
+            });
             onSave();
             onClose();
         } catch (error: any) {

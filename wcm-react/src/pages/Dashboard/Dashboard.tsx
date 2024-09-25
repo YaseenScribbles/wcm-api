@@ -57,6 +57,7 @@ const Dashboard = () => {
                 maxHeight: `calc(100dvh - ${navbarHeight}px)`,
             }}
             className="d-flex flex-column"
+            fluid
         >
             <Header title="DASHBOARD" />
             <div

@@ -13,6 +13,7 @@ import { useNotification } from "../../contexts/NotificationContext";
 import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditReceipt"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
+import YesNoModal from "../../components/YesNoModal";
 
 type Receipt = {
     id: number;
@@ -36,6 +37,8 @@ const Receipt: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
     const { menus } = useUserContext();
+    const [ showAlert, setShowAlert ] = useState(false);
+    const [ alertId, setAlertId ] = useState<number>(0);
 
     const getReceipts = async (page: number = 1) => {
         try {
@@ -191,9 +194,8 @@ const Receipt: React.FC = () => {
                                                             });
                                                             return;
                                                         }
-                                                        deleteReceipt(
-                                                            receipt.id
-                                                        );
+                                                        setAlertId(receipt.id)
+                                                        setShowAlert(true);
                                                     }}
                                                     name="x"
                                                     color="white"
@@ -242,6 +244,7 @@ const Receipt: React.FC = () => {
                     editId={editId}
                 />
             </Suspense>
+            <YesNoModal show={showAlert} onHide={() =>  setShowAlert(false)} onYes={() => deleteReceipt(alertId)} onNo={() => setShowAlert(false)} />
         </Container>
     );
 };

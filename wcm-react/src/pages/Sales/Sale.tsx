@@ -13,6 +13,7 @@ import { useNotification } from "../../contexts/NotificationContext";
 import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditSale"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
+import YesNoModal from "../../components/YesNoModal";
 
 type Sale = {
     id: number;
@@ -36,6 +37,8 @@ const Sale: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
     const { menus } = useUserContext();
+    const [alertId, setAlertId] = useState(0);
+    const [showAlert, setShowAlert] = useState(false);
 
     const getSales = async (page: number = 1) => {
         try {
@@ -163,7 +166,11 @@ const Sale: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            !menus.find(menu => menu.name === "SALE")?.edit
+                                                            !menus.find(
+                                                                (menu) =>
+                                                                    menu.name ===
+                                                                    "SALE"
+                                                            )?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -182,7 +189,11 @@ const Sale: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            !menus.find(menu => menu.name === "SALE")?.delete
+                                                            !menus.find(
+                                                                (menu) =>
+                                                                    menu.name ===
+                                                                    "SALE"
+                                                            )?.delete
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -191,7 +202,8 @@ const Sale: React.FC = () => {
                                                             });
                                                             return;
                                                         }
-                                                        deleteSale(sale.id);
+                                                        setAlertId(sale.id);
+                                                        setShowAlert(true);
                                                     }}
                                                     name="x"
                                                     color="white"
@@ -250,6 +262,12 @@ const Sale: React.FC = () => {
                     editId={editId}
                 />
             </Suspense>
+            <YesNoModal
+                show={showAlert}
+                onHide={() => setShowAlert(false)}
+                onNo={() => setShowAlert(false)}
+                onYes={() => deleteSale(alertId)}
+            />
         </Container>
     );
 };
