@@ -1,5 +1,4 @@
 import { useLayoutEffect, useState } from "react";
-import { Tooltip } from "react-bootstrap";
 import {
     Bar,
     BarChart,
@@ -8,6 +7,7 @@ import {
     ResponsiveContainer,
     XAxis,
     YAxis,
+    Tooltip
 } from "recharts";
 
 type Stock = {
@@ -25,7 +25,7 @@ const StockChart: React.FC<StockChartProps> = ({ stock }) => {
 
     const transformedData = stock.map((item) => ({
         Label: `${item.cloth.toUpperCase()} - ${item.color.toUpperCase()}`,
-        Weight: parseFloat(item.weight),
+        Weight: parseFloat((+item.weight).toFixed(2)),
     }));
 
     useLayoutEffect(() => {

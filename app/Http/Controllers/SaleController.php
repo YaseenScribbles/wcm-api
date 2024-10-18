@@ -29,7 +29,7 @@ class SaleController extends Controller
                     DB::raw("c.name as contact"),
                     's.remarks',
                     DB::raw('u.name as [user]'),
-                    DB::raw('sum(si.weight) as weight')
+                    DB::raw('sum(si.actual_weight) as weight')
                 );
 
 
@@ -66,8 +66,9 @@ class SaleController extends Controller
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
                     'weight' => $value['weight'],
-                    'rate' => $value['rate'],
-                    'amount' => $value['amount'],
+                    'actual_weight' => $value['actual_weight'] == "" ? 0 : $value['actual_weight'],
+                    'rate' => $value['rate'] == "" ? 0 : $value['rate'],
+                    'amount' => $value['amount'] == "" ? 0 : $value['amount'],
                     's_no' => $key + 1
                 ]);
             }
@@ -108,8 +109,9 @@ class SaleController extends Controller
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
                     'weight' => $value['weight'],
-                    'rate' => $value['rate'],
-                    'amount' => $value['amount'],
+                    'actual_weight' => $value['actual_weight'] == "" ? 0 : $value['actual_weight'],
+                    'rate' => $value['rate'] == "" ? 0 : $value['rate'],
+                    'amount' => $value['amount'] == "" ? 0 : $value['amount'],
                     's_no' => $key + 1
                 ]);
             }

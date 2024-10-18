@@ -101,7 +101,7 @@ td.cloth-input, td.color-input {
     min-width: 200px;
 }
 
-td.weight-input {
+td.weight-input, td.actual-weight-input {
     max-width: 100px;
 }
 

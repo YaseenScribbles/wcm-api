@@ -31,7 +31,7 @@ type SaleItem = {
     cloth: string;
     color: string;
     weight: string;
-    actual_weight:string;
+    actual_weight: string;
     rate: string;
     amount: string;
 };
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 });
 
 // PDF Document Component
-const SaleInvoice: React.FC = () => {
+const SaleVariation: React.FC = () => {
     const params = useParams();
 
     const [sale, setSale] = useState<Sale>({
@@ -228,7 +228,7 @@ const SaleInvoice: React.FC = () => {
 
                     {/* Title */}
                     <View style={styles.title}>
-                        <Text>Sales Variation</Text>
+                        <Text>Sales Invoice</Text>
                     </View>
 
                     {/* Sale Details */}
@@ -289,7 +289,9 @@ const SaleInvoice: React.FC = () => {
 
                         <View style={styles.columns}>
                             <Text style={styles.heading}>Phone</Text>
-                            <Text style={styles.master}>{sale.phone && sale.phone}</Text>
+                            <Text style={styles.master}>
+                                {sale.phone && sale.phone}
+                            </Text>
                         </View>
 
                         <View style={styles.columns}>
@@ -325,7 +327,15 @@ const SaleInvoice: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                Weight
+                                DC Weight
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right" },
+                                ]}
+                            >
+                                Actual Weight
                             </Text>
                             <Text
                                 style={[
@@ -341,7 +351,15 @@ const SaleInvoice: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                Amount
+                                DC Amount
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right" },
+                                ]}
+                            >
+                                Actual Amount
                             </Text>
                         </View>
 
@@ -365,6 +383,14 @@ const SaleInvoice: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
+                                    {(+item.weight).toFixed(2)}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCell,
+                                        { textAlign: "right" },
+                                    ]}
+                                >
                                     {(+item.actual_weight).toFixed(2)}
                                 </Text>
                                 <Text
@@ -374,6 +400,14 @@ const SaleInvoice: React.FC = () => {
                                     ]}
                                 >
                                     {(+item.rate).toFixed(2)}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCell,
+                                        { textAlign: "right" },
+                                    ]}
+                                >
+                                    {(+item.weight * +item.rate).toFixed(2)}
                                 </Text>
                                 <Text
                                     style={[
@@ -400,12 +434,40 @@ const SaleInvoice: React.FC = () => {
                             >
                                 {saleItems
                                     .reduce(
-                                        (acc, item) => acc + +item.actual_weight,
+                                        (acc, item) => acc + +item.weight,
+                                        0
+                                    )
+                                    .toFixed(2)}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right", fontWeight: "bold" },
+                                ]}
+                            >
+                                {saleItems
+                                    .reduce(
+                                        (acc, item) =>
+                                            acc + +item.actual_weight,
                                         0
                                     )
                                     .toFixed(2)}
                             </Text>
                             <Text style={styles.tableCell}></Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right", fontWeight: "bold" },
+                                ]}
+                            >
+                                {saleItems
+                                    .reduce(
+                                        (acc, item) =>
+                                            acc + +item.weight * +item.rate,
+                                        0
+                                    )
+                                    .toFixed(2)}
+                            </Text>
                             <Text
                                 style={[
                                     styles.tableCell,
@@ -422,19 +484,74 @@ const SaleInvoice: React.FC = () => {
                         </View>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Total Weight</Text>
+                        <Text>DC Weight</Text>
                         <Text>
                             {saleItems
-                                .reduce((acc, item) => acc + +item.actual_weight, 0)
+                                .reduce((acc, item) => acc + +item.weight, 0)
                                 .toFixed(2)}
                         </Text>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Total Amount</Text>
+                        <Text>DC Amount</Text>
+                        <Text>
+                            {saleItems
+                                .reduce(
+                                    (acc, item) =>
+                                        acc + +item.rate * +item.weight,
+                                    0
+                                )
+                                .toFixed(2)}
+                        </Text>
+                    </View>
+                    <View style={styles.summary}>
+                        <Text>Actual Weight</Text>
+                        <Text>
+                            {saleItems
+                                .reduce(
+                                    (acc, item) => acc + +item.actual_weight,
+                                    0
+                                )
+                                .toFixed(2)}
+                        </Text>
+                    </View>
+                    <View style={styles.summary}>
+                        <Text>Actual Amount</Text>
                         <Text>
                             {saleItems
                                 .reduce((acc, item) => acc + +item.amount, 0)
                                 .toFixed(2)}
+                        </Text>
+                    </View>
+                    <View style={styles.summary}>
+                        <Text>Variation Weight</Text>
+                        <Text>
+                            {(
+                                saleItems.reduce(
+                                    (acc, item) => acc + +item.actual_weight,
+                                    0
+                                ) -
+                                saleItems.reduce(
+                                    (acc, item) => acc + +item.weight,
+                                    0
+                                )
+                            ).toFixed(2)}
+                        </Text>
+                    </View>
+                    <View style={styles.summary}>
+                        <Text>Variation Amount</Text>
+                        <Text>
+                            {(
+                                saleItems.reduce(
+                                    (acc, item) =>
+                                        acc + +item.amount,
+                                    0
+                                ) -
+                                saleItems.reduce(
+                                    (acc, item) =>
+                                        acc + +item.rate * +item.weight,
+                                    0
+                                )
+                            ).toFixed(2)}
                         </Text>
                     </View>
                 </Page>
@@ -443,4 +560,4 @@ const SaleInvoice: React.FC = () => {
     );
 };
 
-export default SaleInvoice;
+export default SaleVariation;

@@ -39,6 +39,7 @@ type SaleItem = {
     cloth_id: number | null;
     color_id: number | null;
     weight: string;
+    actual_weight: string;
     rate: string;
     amount: string;
 };
@@ -60,6 +61,7 @@ type Action =
               cloth_id: number | null;
               color_id: number | null;
               weight: string;
+              actual_weight: string;
               rate: string;
           };
       }
@@ -84,10 +86,11 @@ const reducer = (state: State, action: Action): State => {
                               ...item,
                               ...action.payload,
                               amount:
-                                  action.payload.rate && action.payload.weight
+                                  action.payload.rate &&
+                                  action.payload.actual_weight
                                       ? (
                                             +action.payload.rate *
-                                            +action.payload.weight
+                                            +action.payload.actual_weight
                                         ).toFixed(2)
                                       : "",
                           }
@@ -109,7 +112,9 @@ const reducer = (state: State, action: Action): State => {
         case "REMOVE_EMPTY_ROWS":
             return {
                 ...state,
-                items: state.items.filter((item) => item.cloth_id !== null),
+                items: state.items.filter(
+                    (item) => item.rate !== null && item.actual_weight !== null
+                ),
             };
         case "SET ITEM":
             return {
@@ -118,6 +123,11 @@ const reducer = (state: State, action: Action): State => {
         default:
             return state;
     }
+};
+
+type Summary = {
+    weight: number;
+    amount: number;
 };
 
 const AddEditSales: React.FC<AddEditSaleProps> = ({
@@ -144,6 +154,14 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
     const { colors } = useTypedSelector((s) => s.colors);
     const [currentStock, setCurrentStock] = useState<SaleItem[]>([]);
     const [editStock, setEditStock] = useState<SaleItem[]>([]);
+    const [dc, setDc] = useState<Summary>({
+        weight: 0,
+        amount: 0,
+    });
+    const [actual, setActual] = useState<Summary>({
+        weight: 0,
+        amount: 0,
+    });
 
     const isValid = () => {
         let isValid = true;
@@ -180,7 +198,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
     };
 
     const addSale = async () => {
-        updateState({ type: "REMOVE_EMPTY_ROWS" });
+        // updateState({ type: "REMOVE_EMPTY_ROWS" });
         if (!isValid()) return;
         try {
             setLoading(true);
@@ -188,7 +206,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 `${API_URL}sale`,
                 {
                     ...sale,
-                    sale_items: state.items.filter((item) => item.rate !== "" && item.weight !== ""),
+                    sale_items: state.items,
                 },
                 {
                     headers: {
@@ -260,6 +278,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     cloth_id: +sale.cloth_id!,
                     color_id: +sale.color_id!,
                     weight: (+sale.weight).toFixed(2),
+                    actual_weight: (+sale.actual_weight).toFixed(2),
                     rate: (+sale.rate).toFixed(2),
                     amount: (+sale.amount).toFixed(2),
                 };
@@ -270,6 +289,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     cloth_id: +sto.cloth_id!,
                     color_id: +sto.color_id!,
                     weight: (+sto.weight).toFixed(2),
+                    actual_weight: (+sto.weight).toFixed(2),
                     rate: (+sto.rate).toFixed(2),
                     amount: (+sto.amount).toFixed(2),
                 };
@@ -299,7 +319,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
     };
 
     const updateSale = async () => {
-        updateState({ type: "REMOVE_EMPTY_ROWS" });
+        // updateState({ type: "REMOVE_EMPTY_ROWS" });
         if (!isValid()) return;
         try {
             setLoading(true);
@@ -307,7 +327,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 `${API_URL}sale/${editId}?_method=PUT`,
                 {
                     ...sale,
-                    sale_items: state.items.filter((item) => item.rate !== "" && item.weight !== ""),
+                    sale_items: state.items,
                 },
                 {
                     headers: {
@@ -380,6 +400,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     cloth_id: +e.cloth_id!,
                     color_id: +e.color_id!,
                     weight: (+e.weight).toFixed(2),
+                    actual_weight: (+e.weight).toFixed(2),
                     rate: "",
                     amount: "",
                 };
@@ -405,6 +426,26 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (state.items.length <= 0) return;
+
+        setDc({
+            weight: state.items.reduce((acc, item) => +item.weight + acc, 0),
+            amount: state.items.reduce(
+                (acc, item) => +item.weight * +item.rate + acc,
+                0
+            ),
+        });
+
+        setActual({
+            weight: state.items.reduce(
+                (acc, item) => +item.actual_weight + acc,
+                0
+            ),
+            amount: state.items.reduce((acc, item) => +item.amount + acc, 0),
+        });
+    }, [state]);
 
     useEffect(() => {
         if (edit) {
@@ -439,6 +480,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
             onShow={() => {
                 if (!edit) getStock();
             }}
+            fullscreen="xxl-down"
         >
             <Modal.Header closeButton>
                 <div className="h5">{edit ? "Edit Sale" : "Add Sale"}</div>
@@ -527,9 +569,10 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                             <th>CLOTH</th>
                             <th>COLOR</th>
                             <th>WEIGHT</th>
+                            <th>ACT. WEIGHT</th>
                             <th>RATE</th>
                             <th>AMOUNT</th>
-                            <th>ACTIONS</th>
+                            <th style={{ display: "none" }}>ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -624,9 +667,10 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                                 style={{
                                                     textAlign: "center",
                                                 }}
-                                                disabled={
-                                                    item.cloth_id === null
-                                                }
+                                                // disabled={
+                                                //     item.cloth_id === null
+                                                // }
+                                                disabled
                                                 onChange={(e) => {
                                                     let isValid = true;
                                                     try {
@@ -690,13 +734,50 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                             />
                                         </div>
                                     </td>
+                                    <td className="actual-weight-input">
+                                        <div>
+                                            <Form.Control
+                                                style={{
+                                                    textAlign: "center",
+                                                }}
+                                                onChange={(e) => {
+                                                    let isValid = true;
+                                                    try {
+                                                        parseFloat(
+                                                            e.target.value
+                                                        );
+                                                    } catch (error: any) {
+                                                        addNotification({
+                                                            message:
+                                                                error.message,
+                                                            type: "failure",
+                                                        });
+                                                        isValid = false;
+                                                    }
+                                                    if (!isValid) return;
+                                                    updateState({
+                                                        type: "UPDATE_ITEM",
+                                                        payload: {
+                                                            ...item,
+                                                            actual_weight:
+                                                                e.target.value,
+                                                            index,
+                                                        },
+                                                    });
+                                                }}
+                                                value={item.actual_weight}
+                                            />
+                                        </div>
+                                    </td>
                                     <td className="rate-input">
                                         <div>
                                             <Form.Control
                                                 style={{
                                                     textAlign: "center",
                                                 }}
-                                                disabled={item.weight === ""}
+                                                disabled={
+                                                    item.actual_weight === ""
+                                                }
                                                 onChange={(e) => {
                                                     const value =
                                                         e.target.value;
@@ -733,11 +814,20 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                                     textAlign: "center",
                                                 }}
                                                 disabled
-                                                value={item.amount}
+                                                value={
+                                                    isNaN(+item.amount)
+                                                        ? ""
+                                                        : item.amount
+                                                }
                                             />
                                         </div>
                                     </td>
-                                    <td style={{ verticalAlign: "middle" }}>
+                                    <td
+                                        style={{
+                                            verticalAlign: "middle",
+                                            display: "none",
+                                        }}
+                                    >
                                         <div className="d-flex align-items-center gap-1">
                                             <Button
                                                 variant="dark"
@@ -765,42 +855,82 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 </Table>
             </Modal.Body>
             <Modal.Footer>
-                <span className="me-auto" style={{ width: "30%" }}>
-                    <div className="flex">
+                <span className="me-1" style={{ width: "25%" }}>
+                    <div>
                         <div>
                             <Row>
-                                <Col xs={4}>
-                                    <label>Total Weight</label>
+                                <Col xs={5}>
+                                    <label>DC. Weight</label>
+                                </Col>
+                                <Col xs={1}>:</Col>
+                                <Col>
+                                    <strong>{dc.weight.toFixed(2)}</strong>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div>
+                            <Row>
+                                <Col xs={5}>
+                                    <label>DC. Amount</label>
+                                </Col>
+                                <Col xs={1}>:</Col>
+                                <Col>
+                                    <strong>{dc.amount.toFixed(2)}</strong>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </span>
+                <span className="me-1" style={{ width: "25%" }}>
+                    <div>
+                        <div>
+                            <Row>
+                                <Col xs={5}>
+                                    <label>Final Weight</label>
+                                </Col>
+                                <Col xs={1}>:</Col>
+                                <Col>
+                                    <strong>{actual.weight.toFixed(2)}</strong>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div>
+                            <Row>
+                                <Col xs={5}>
+                                    <label>Final Amount</label>
+                                </Col>
+                                <Col xs={1}>:</Col>
+                                <Col>
+                                    <strong>{actual.amount.toFixed(2)}</strong>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </span>
+                <span className="me-auto" style={{ width: "25%" }}>
+                    <div>
+                        <div>
+                            <Row>
+                                <Col xs={5}>
+                                    <label>Var. Weight</label>
                                 </Col>
                                 <Col xs={1}>:</Col>
                                 <Col>
                                     <strong>
-                                        {state.items
-                                            .reduce(
-                                                (acc, item) =>
-                                                    +item.weight + acc,
-                                                0
-                                            )
-                                            .toFixed(2)}
+                                        {(actual.weight - dc.weight).toFixed(2)}
                                     </strong>
                                 </Col>
                             </Row>
                         </div>
                         <div>
                             <Row>
-                                <Col xs={4}>
-                                    <label>Total Amount</label>
+                                <Col xs={5}>
+                                    <label>Var. Amount</label>
                                 </Col>
                                 <Col xs={1}>:</Col>
                                 <Col>
                                     <strong>
-                                        {state.items
-                                            .reduce(
-                                                (acc, item) =>
-                                                    +item.amount + acc,
-                                                0
-                                            )
-                                            .toFixed(2)}
+                                    {(actual.amount - dc.amount).toFixed(2)}
                                     </strong>
                                 </Col>
                             </Row>

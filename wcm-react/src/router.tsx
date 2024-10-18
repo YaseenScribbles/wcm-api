@@ -12,6 +12,7 @@ import SaleInvoice from "./pages/Sales/SaleInvoice";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import FourNotThree from "./pages/Error/403";
+import SaleVariation from "./pages/Sales/SaleVariation";
 
 const router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
     {
         path: "/sale/:id",
         element: <SaleInvoice />,
+    },
+    {
+        path: "/variation/:id",
+        element: <SaleVariation />,
     },
 ]);
 

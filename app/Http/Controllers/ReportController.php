@@ -48,7 +48,7 @@ class ReportController extends Controller
             where s.id =" . $id;
             $sale = DB::select($masterSql);
 
-            $detailsSql = "select si.s_no,cl.name [cloth], co.name [color], si.weight, si.rate, si.amount
+            $detailsSql = "select si.s_no,cl.name [cloth], co.name [color], si.actual_weight, si.rate, si.amount
             from sale_items si
             inner join cloths cl on cl.id = si.cloth_id
             inner join colors co on co.id = si.color_id

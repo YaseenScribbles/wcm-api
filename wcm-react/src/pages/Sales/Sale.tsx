@@ -218,6 +218,17 @@ const Sale: React.FC = () => {
                                                         );
                                                     }}
                                                 ></box-icon>
+                                                <box-icon
+                                                    hidden
+                                                    name="file"
+                                                    color="white"
+                                                    onClick={() => {
+                                                        window.open(
+                                                            `/variation/${sale.id}`,
+                                                            "_blank"
+                                                        );
+                                                    }}
+                                                ></box-icon>
                                             </div>
                                         </td>
                                     </tr>

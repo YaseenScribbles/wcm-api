@@ -14,6 +14,7 @@ class SaleItem extends Model
         'cloth_id',
         'color_id',
         'weight',
+        'actual_weight',
         'rate',
         'amount',
         's_no',

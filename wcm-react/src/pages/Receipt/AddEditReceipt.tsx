@@ -418,6 +418,7 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
             contentClassName="custom-modal"
             dialogClassName="center"
             size="xl"
+            fullscreen="xxl-down"
         >
             <Modal.Header closeButton>
                 <div className="h5">
