@@ -228,7 +228,7 @@ const SaleVariation: React.FC = () => {
 
                     {/* Title */}
                     <View style={styles.title}>
-                        <Text>Sales Invoice</Text>
+                        <Text>Sales Variation</Text>
                     </View>
 
                     {/* Sale Details */}
@@ -269,8 +269,8 @@ const SaleVariation: React.FC = () => {
                                     },
                                 ]}
                             >
-                                {sale.address && sale.address.toUpperCase()},{" "}
-                                {sale.city && sale.city.toUpperCase()} -
+                                {sale.address && sale.address.toUpperCase() + ", "}
+                                {sale.city && sale.city.toUpperCase() + "-"}
                                 {sale.pincode && sale.pincode}
                             </Text>
                             <Text
@@ -335,7 +335,7 @@ const SaleVariation: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                Actual Weight
+                                Act. Weight
                             </Text>
                             <Text
                                 style={[
@@ -359,7 +359,7 @@ const SaleVariation: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                Actual Amount
+                                Act. Amount
                             </Text>
                         </View>
 

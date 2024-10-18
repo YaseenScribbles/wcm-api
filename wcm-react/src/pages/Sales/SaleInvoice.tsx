@@ -228,7 +228,7 @@ const SaleInvoice: React.FC = () => {
 
                     {/* Title */}
                     <View style={styles.title}>
-                        <Text>Sales Variation</Text>
+                        <Text>Sales Invoice</Text>
                     </View>
 
                     {/* Sale Details */}
@@ -269,8 +269,8 @@ const SaleInvoice: React.FC = () => {
                                     },
                                 ]}
                             >
-                                {sale.address && sale.address.toUpperCase()},{" "}
-                                {sale.city && sale.city.toUpperCase()} -
+                                {sale.address && sale.address.toUpperCase() + ", "}
+                                {sale.city && sale.city.toUpperCase() + "-"}
                                 {sale.pincode && sale.pincode}
                             </Text>
                             <Text

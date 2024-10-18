@@ -163,72 +163,109 @@ const Sale: React.FC = () => {
                                         <td>{sale.user.toUpperCase()}</td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
-                                                <box-icon
-                                                    onClick={() => {
-                                                        if (
-                                                            !menus.find(
-                                                                (menu) =>
-                                                                    menu.name ===
-                                                                    "SALE"
-                                                            )?.edit
-                                                        ) {
-                                                            addNotification({
-                                                                message:
-                                                                    "ACCESS RESTRICTED",
-                                                                type: "failure",
-                                                            });
-                                                            return;
-                                                        }
-                                                        setEditId(sale.id);
-                                                        setEditMode(true);
-                                                        setShowModal(true);
-                                                    }}
-                                                    name="edit"
-                                                    color="white"
-                                                ></box-icon>
-                                                <box-icon
-                                                    onClick={() => {
-                                                        if (
-                                                            !menus.find(
-                                                                (menu) =>
-                                                                    menu.name ===
-                                                                    "SALE"
-                                                            )?.delete
-                                                        ) {
-                                                            addNotification({
-                                                                message:
-                                                                    "ACCESS RESTRICTED",
-                                                                type: "failure",
-                                                            });
-                                                            return;
-                                                        }
-                                                        setAlertId(sale.id);
-                                                        setShowAlert(true);
-                                                    }}
-                                                    name="x"
-                                                    color="white"
-                                                ></box-icon>
-                                                <box-icon
-                                                    name="file"
-                                                    color="white"
-                                                    onClick={() => {
-                                                        window.open(
-                                                            `/sale/${sale.id}`,
-                                                            "_blank"
-                                                        );
-                                                    }}
-                                                ></box-icon>
-                                                <box-icon
-                                                    hidden
-                                                    name="file"
-                                                    color="white"
-                                                    onClick={() => {
-                                                        window.open(
-                                                            `/variation/${sale.id}`,
-                                                            "_blank"
-                                                        );
-                                                    }}
-                                                ></box-icon>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>edit</Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        onClick={() => {
+                                                            if (
+                                                                !menus.find(
+                                                                    (menu) =>
+                                                                        menu.name ===
+                                                                        "SALE"
+                                                                )?.edit
+                                                            ) {
+                                                                addNotification(
+                                                                    {
+                                                                        message:
+                                                                            "ACCESS RESTRICTED",
+                                                                        type: "failure",
+                                                                    }
+                                                                );
+                                                                return;
+                                                            }
+                                                            setEditId(sale.id);
+                                                            setEditMode(true);
+                                                            setShowModal(true);
+                                                        }}
+                                                        name="edit"
+                                                        color="white"
+                                                    ></box-icon>
+                                                </OverlayTrigger>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>
+                                                            delete
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        onClick={() => {
+                                                            if (
+                                                                !menus.find(
+                                                                    (menu) =>
+                                                                        menu.name ===
+                                                                        "SALE"
+                                                                )?.delete
+                                                            ) {
+                                                                addNotification(
+                                                                    {
+                                                                        message:
+                                                                            "ACCESS RESTRICTED",
+                                                                        type: "failure",
+                                                                    }
+                                                                );
+                                                                return;
+                                                            }
+                                                            setAlertId(sale.id);
+                                                            setShowAlert(true);
+                                                        }}
+                                                        name="x"
+                                                        color="white"
+                                                    ></box-icon>
+                                                </OverlayTrigger>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>
+                                                            invoice
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        name="file"
+                                                        color="white"
+                                                        onClick={() => {
+                                                            window.open(
+                                                                `/sale/${sale.id}`,
+                                                                "_blank"
+                                                            );
+                                                        }}
+                                                    ></box-icon>
+                                                </OverlayTrigger>
+                                                <OverlayTrigger
+                                                    placement="top"
+                                                    overlay={
+                                                        <Tooltip>
+                                                            variation
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <box-icon
+                                                        name="file"
+                                                        color="white"
+                                                        onClick={() => {
+                                                            window.open(
+                                                                `/variation/${sale.id}`,
+                                                                "_blank"
+                                                            );
+                                                        }}
+                                                    ></box-icon>
+                                                </OverlayTrigger>
                                             </div>
                                         </td>
                                     </tr>
