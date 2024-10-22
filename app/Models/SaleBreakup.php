@@ -12,7 +12,8 @@ class SaleBreakup extends Model
     protected $fillable = [
         'sale_id',
         'ledger',
-        'value'
+        'value',
+        's_no',
     ];
 
     public $timestamps = false;
