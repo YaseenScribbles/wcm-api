@@ -24,6 +24,8 @@ type Sale = {
     pincode: string;
     phone: string;
     gst: string;
+    ref_no: string;
+    ref_date: string;
 };
 
 type SaleItem = {
@@ -171,6 +173,8 @@ const SaleVariation: React.FC = () => {
         pincode: "",
         phone: "",
         gst: "",
+        ref_no: "",
+        ref_date: "",
     });
     const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
     const [breakup, setBreakup] = useState<Breakup[]>([]);
@@ -320,8 +324,17 @@ const SaleVariation: React.FC = () => {
                         <Text>Sale Items</Text>
                     </View> */}
 
-                    <View style={[styles.center, styles.sectionTitle,{ marginVertical:10 }]}>
-                        <Text>CUTTING WASTE REPORT</Text>
+                    <View
+                        style={[
+                            styles.center,
+                            styles.sectionTitle,
+                            { marginVertical: 10 },
+                        ]}
+                    >
+                        <Text>
+                            CUTTING WASTE REPORT (
+                            {new Date(sale.ref_date).toLocaleDateString()})
+                        </Text>
                     </View>
 
                     {/* Sale Items Table */}
@@ -407,7 +420,9 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.actual_weight - +item.weight).toFixed(2)}
+                                    {(
+                                        +item.actual_weight - +item.weight
+                                    ).toFixed(2)}
                                 </Text>
                                 <Text
                                     style={[
@@ -469,7 +484,9 @@ const SaleVariation: React.FC = () => {
                                 {saleItems
                                     .reduce(
                                         (acc, item) =>
-                                            acc + (+item.actual_weight - +item.weight),
+                                            acc +
+                                            (+item.actual_weight -
+                                                +item.weight),
                                         0
                                     )
                                     .toFixed(2)}
@@ -503,6 +520,50 @@ const SaleVariation: React.FC = () => {
                             </Text>
                         </View>
                     </View>
+                    {/* <View
+                        style={[
+                            styles.sectionTitle,
+                            {
+                                width:"50%",
+                                marginLeft:"auto",
+                            },
+                        ]}
+                    >
+                        <Text>BREAKUP</Text>
+                    </View> */}
+                    {breakup.map((b, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.summary,
+                                {
+                                    width: "50%",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    marginLeft: "auto",
+                                    marginVertical: "2",
+                                    padding: "5",
+                                },
+                            ]}
+                        >
+                            <Text>{b.ledger.toUpperCase()}</Text>
+                            <Text>{(+b.value).toFixed(2)}</Text>
+                        </View>
+                    ))}
+
+                    <View
+                        style={[
+                            styles.center,
+                            styles.sectionTitle,
+                            {
+                                marginVertical: "10",
+                                padding:"5",
+                                borderBottom: "1 solid #333",
+                            },
+                        ]}
+                    >
+                        <Text>SUMMARY</Text>
+                    </View>
                     <View style={styles.summary}>
                         <Text>DC Weight</Text>
                         <Text>
@@ -524,7 +585,7 @@ const SaleVariation: React.FC = () => {
                         </Text>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Actual Weight</Text>
+                        <Text>Final Weight</Text>
                         <Text>
                             {saleItems
                                 .reduce(
@@ -535,7 +596,7 @@ const SaleVariation: React.FC = () => {
                         </Text>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Actual Amount</Text>
+                        <Text>Final Amount</Text>
                         <Text>
                             {saleItems
                                 .reduce((acc, item) => acc + +item.amount, 0)
@@ -543,7 +604,7 @@ const SaleVariation: React.FC = () => {
                         </Text>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Variation Weight</Text>
+                        <Text>Variation (In Weight)</Text>
                         <Text>
                             {(
                                 saleItems.reduce(
@@ -558,7 +619,7 @@ const SaleVariation: React.FC = () => {
                         </Text>
                     </View>
                     <View style={styles.summary}>
-                        <Text>Variation Amount</Text>
+                        <Text>Variation (In Amount)</Text>
                         <Text>
                             {(
                                 saleItems.reduce(

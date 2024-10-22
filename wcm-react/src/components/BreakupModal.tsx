@@ -14,6 +14,7 @@ type BreakupProps = {
     setBreakup: React.Dispatch<React.SetStateAction<Breakup[]>>;
     onHide: () => void;
     addSale: () => void;
+    loading: boolean;
 };
 
 const Breakup: React.FC<BreakupProps> = ({
@@ -23,6 +24,7 @@ const Breakup: React.FC<BreakupProps> = ({
     setBreakup,
     onHide,
     addSale,
+    loading,
 }) => {
     const [data, setData] = useState<Breakup>({
         ledger: "",
@@ -37,14 +39,20 @@ const Breakup: React.FC<BreakupProps> = ({
             backdrop="static"
             keyboard={false}
             onHide={() => {
-                setBreakup([]);
                 onHide();
             }}
             scrollable
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title>Sale Breakup ({(+total).toFixed(2)})</Modal.Title>
+                <Modal.Title>
+                    Sale Breakup (
+                    {(
+                        +total -
+                        breakup.reduce((acc, curr) => acc + +curr.value, 0)
+                    ).toFixed(2)}
+                    )
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
@@ -128,11 +136,23 @@ const Breakup: React.FC<BreakupProps> = ({
                     <Col xs={4}>VALUE</Col>
                     <Col></Col>
                 </Row>
-                {breakup.length > 0 &&
+                {loading ? (
+                    <div className="d-flex justify-content-center">
+                        <box-icon
+                            name="loader"
+                            animation="spin"
+                            size="lg"
+                        ></box-icon>
+                    </div>
+                ) : (
+                    breakup.length > 0 &&
+                    loading === false &&
                     breakup.map((b, index) => (
                         <Row key={index} className="mb-1 p-1">
                             <Col xs={5}>{b.ledger.toUpperCase()}</Col>
-                            <Col xs={4} className="text-end">{(+b.value).toFixed(2)}</Col>
+                            <Col xs={4} className="text-end">
+                                {(+b.value).toFixed(2)}
+                            </Col>
                             <Col className="text-end">
                                 <box-icon
                                     name="x"
@@ -149,16 +169,16 @@ const Breakup: React.FC<BreakupProps> = ({
                                 ></box-icon>
                             </Col>
                         </Row>
-                    ))}
+                    ))
+                )}
 
                 {breakup.length > 0 && (
                     <Row className="border-top p-1">
                         <Col xs={5}>TOTAL</Col>
                         <Col xs={4} className="text-end">
-                            {breakup.reduce(
-                                (acc, curr) => acc + +curr.value,
-                                0
-                            ).toFixed(2)}
+                            {breakup
+                                .reduce((acc, curr) => acc + +curr.value, 0)
+                                .toFixed(2)}
                         </Col>
                         <Col></Col>
                     </Row>
@@ -166,6 +186,7 @@ const Breakup: React.FC<BreakupProps> = ({
             </Modal.Body>
             <Modal.Footer>
                 <Button
+                    disabled={loading}
                     variant="dark"
                     onClick={() => {
                         if (

@@ -42,7 +42,7 @@ class ReportController extends Controller
     {
         try {
             //code...
-            $masterSql = "select s.id [no], s.created_at [date], s.remarks, c.name , c.address , c.city, c.pincode, c.phone, c.gst
+            $masterSql = "select s.id [no], s.created_at [date], s.remarks, c.name , c.address , c.city, c.pincode, c.phone, c.gst, s.ref_no, s.ref_date
             from sales s
             inner join contacts c on s.contact_id = c.id
             where s.id =" . $id;

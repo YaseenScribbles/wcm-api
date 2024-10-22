@@ -269,6 +269,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 type: "success",
             });
             onSave();
+            setShowBreakup(false);
             onClose();
         } catch (error: any) {
             const {
@@ -407,6 +408,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
             });
 
             onSave();
+            setShowBreakup(false);
             onClose();
         } catch (error: any) {
             const {
@@ -595,6 +597,8 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     user_id: user!.id,
                 });
                 updateState({ type: "CLEAR" });
+                setShowBreakup(false);
+                setBreakup([]);
                 onClose();
             }}
             centered
@@ -1028,6 +1032,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     setBreakup={setBreakup}
                     total={actual.amount.toFixed(2)}
                     addSale={edit ? updateSale : addSale}
+                    loading={loading}
                 />
             </Modal.Body>
             <Modal.Footer>
