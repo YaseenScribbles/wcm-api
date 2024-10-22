@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
     FormLabel,
     Modal,
@@ -127,6 +127,7 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
     const { contacts } = useTypedSelector((s) => s.contacts);
     const { cloths } = useTypedSelector((s) => s.cloths);
     const { colors } = useTypedSelector((s) => s.colors);
+    const lastRowRef = useRef<HTMLTableRowElement | null>(null);
 
     const isValid = () => {
         let isValid = true;
@@ -388,6 +389,16 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
     };
 
     useEffect(() => {
+        if (lastRowRef.current) {
+            lastRowRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+            lastRowRef.current.focus();
+        }
+    }, [state.items.length]);
+
+    useEffect(() => {
         if (edit) {
             getReceipt(editId!);
         }
@@ -556,7 +567,14 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                         ) : (
                             state.items.length > 0 &&
                             state.items.map((item: ReceiptItem, index) => (
-                                <tr key={index}>
+                                <tr
+                                    key={index}
+                                    ref={
+                                        index === state.items.length - 1
+                                            ? lastRowRef
+                                            : null
+                                    }
+                                >
                                     <td style={{ verticalAlign: "middle" }}>
                                         <div className="d-flex justify-content-center align-items-center h-100">
                                             {index + 1}

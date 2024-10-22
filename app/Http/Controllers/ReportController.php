@@ -55,7 +55,11 @@ class ReportController extends Controller
             where si.sale_id = " . $id;
             $saleItems = DB::select($detailsSql);
 
-            return response()->json(['sale' => $sale[0], 'saleItems' => $saleItems]);
+            $breakupSql = "select b.ledger, b.value
+            from sale_breakup b where b.sale_id = " . $id . " order by b.s_no";
+            $breakup = DB::select($breakupSql);
+
+            return response()->json(['sale' => $sale[0], 'saleItems' => $saleItems, 'breakup' => $breakup]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['message' => $th->getMessage()]);

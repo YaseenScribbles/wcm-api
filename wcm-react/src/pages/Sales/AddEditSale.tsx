@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
     FormLabel,
     Modal,
@@ -18,6 +18,8 @@ import { getColors } from "../../Redux Store/Slices/ColorSlice";
 import { getCloths } from "../../Redux Store/Slices/ClothSlice";
 import { useNotification } from "../../contexts/NotificationContext";
 import ReactSelect from "react-select";
+import BreakupModal from "../../components/BreakupModal";
+import AsyncCreateSelect from "react-select/async-creatable";
 
 type AddEditSaleProps = {
     show: boolean;
@@ -42,6 +44,12 @@ type SaleItem = {
     actual_weight: string;
     rate: string;
     amount: string;
+    isNewRow: boolean;
+};
+
+type Breakup = {
+    ledger: string;
+    value: string;
 };
 
 type State = {
@@ -68,7 +76,8 @@ type Action =
     | { type: "REMOVE_ITEM"; payload: { index: number } }
     | { type: "CLEAR" }
     | { type: "REMOVE_EMPTY_ROWS" }
-    | { type: "SET ITEM"; payload: SaleItem[] };
+    | { type: "SET ITEM"; payload: SaleItem[] }
+    | { type: "ADD NEW ROW" };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -120,6 +129,25 @@ const reducer = (state: State, action: Action): State => {
             return {
                 items: action.payload,
             };
+        case "ADD NEW ROW":
+            return {
+                ...state,
+                items: [
+                    ...state.items,
+                    {
+                        cloth_id:
+                            state.items.length > 0
+                                ? state.items[state.items.length - 1].cloth_id
+                                : null,
+                        color_id: null,
+                        weight: "",
+                        actual_weight: "",
+                        rate: "",
+                        amount: "",
+                        isNewRow: true,
+                    },
+                ],
+            };
         default:
             return state;
     }
@@ -128,6 +156,15 @@ const reducer = (state: State, action: Action): State => {
 type Summary = {
     weight: number;
     amount: number;
+};
+
+type Color = {
+    id: number;
+    name: string;
+    active: string;
+    user: {
+        name: string;
+    };
 };
 
 const AddEditSales: React.FC<AddEditSaleProps> = ({
@@ -162,6 +199,10 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
         weight: 0,
         amount: 0,
     });
+    const lastRowRef = useRef<HTMLTableRowElement | null>(null);
+    const [isRowAdded, setIsRowAdded] = useState(false);
+    const [breakup, setBreakup] = useState<Breakup[]>([]);
+    const [showBreakup, setShowBreakup] = useState(false);
 
     const isValid = () => {
         let isValid = true;
@@ -207,6 +248,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 {
                     ...sale,
                     sale_items: state.items,
+                    breakup: breakup,
                 },
                 {
                     headers: {
@@ -268,10 +310,11 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 remarks: sale.remarks,
                 user_id: user!.id,
             });
-            const { sale_items } = sale;
+            const { sale_items, sale_breakup } = sale;
 
             let saleItems: SaleItem[] = [];
             let stockItems: SaleItem[] = [];
+            let breakup: Breakup[] = [];
 
             sale_items.forEach((sale: SaleItem) => {
                 let saleItem: SaleItem = {
@@ -281,6 +324,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     actual_weight: (+sale.actual_weight).toFixed(2),
                     rate: (+sale.rate).toFixed(2),
                     amount: (+sale.amount).toFixed(2),
+                    isNewRow: false,
                 };
                 saleItems.push(saleItem);
             });
@@ -292,8 +336,16 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     actual_weight: (+sto.weight).toFixed(2),
                     rate: (+sto.rate).toFixed(2),
                     amount: (+sto.amount).toFixed(2),
+                    isNewRow: false,
                 };
                 stockItems.push(stockItem);
+            });
+
+            sale_breakup.forEach((e: Breakup) => {
+                breakup.push({
+                    ledger: e.ledger.toUpperCase(),
+                    value: (+e.value).toFixed(2),
+                });
             });
 
             updateState({
@@ -302,6 +354,8 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
             });
             setCurrentStock(stockItems);
             setEditStock(saleItems);
+            setBreakup(breakup);
+
             // setContact()
         } catch (error: any) {
             const {
@@ -328,6 +382,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                 {
                     ...sale,
                     sale_items: state.items,
+                    breakup: breakup,
                 },
                 {
                     headers: {
@@ -403,6 +458,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     actual_weight: (+e.weight).toFixed(2),
                     rate: "",
                     amount: "",
+                    isNewRow: false,
                 };
                 saleItems.push(saleItem);
             });
@@ -427,6 +483,61 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
         }
     };
 
+    const addRow = () => {
+        updateState({ type: "ADD NEW ROW" });
+    };
+
+    const loadColors = async (input: string) => {
+        const resp = await axios.get(
+            `${API_URL}color?all=true&filter=${input}`,
+            {
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+        const { colors } = resp.data;
+        return colors.map((item: Color) => ({
+            label: item.name.toUpperCase(),
+            value: item.id,
+        }));
+    };
+
+    const addNewColor = async (input: string) => {
+        try {
+            const resp = await axios.post(
+                `${API_URL}color`,
+                { name: input, user_id: user!.id },
+                {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                }
+            );
+
+            const { message } = resp.data;
+            await dispatch(getColors());
+            addNotification({
+                message,
+                type: "success",
+            });
+            // return {
+            //     label: color.name,
+            //     value: color.id,
+            // };
+        } catch (error: any) {
+            const {
+                response: {
+                    data: { message },
+                },
+            } = error;
+            addNotification({
+                message,
+                type: "failure",
+            });
+        }
+    };
+
     useEffect(() => {
         if (state.items.length <= 0) return;
 
@@ -446,6 +557,19 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
             amount: state.items.reduce((acc, item) => +item.amount + acc, 0),
         });
     }, [state]);
+
+    useEffect(() => {
+        if (isRowAdded) {
+            if (lastRowRef.current) {
+                lastRowRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+                lastRowRef.current.focus();
+                setIsRowAdded(false);
+            }
+        }
+    }, [state.items.length]);
 
     useEffect(() => {
         if (edit) {
@@ -572,13 +696,13 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                             <th>ACT. WEIGHT</th>
                             <th>RATE</th>
                             <th>AMOUNT</th>
-                            <th style={{ display: "none" }}>ACTIONS</th>
+                            <th>ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={7} className="text-center">
+                                <td colSpan={8} className="text-center">
                                     <box-icon
                                         name="loader"
                                         animation="spin"
@@ -589,7 +713,15 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                         ) : (
                             state.items.length > 0 &&
                             state.items.map((item: SaleItem, index) => (
-                                <tr key={index}>
+                                <tr
+                                    key={index}
+                                    ref={
+                                        state.items.length - 1 === index
+                                            ? lastRowRef
+                                            : null
+                                    }
+                                    tabIndex={-1}
+                                >
                                     <td style={{ verticalAlign: "middle" }}>
                                         <div className="d-flex justify-content-center align-items-center h-100">
                                             {index + 1}
@@ -598,7 +730,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                     <td className="cloth-input">
                                         <div>
                                             <ReactSelect
-                                                isDisabled
+                                                isDisabled={!item.isNewRow}
                                                 value={cloths
                                                     .filter(
                                                         (cloth) =>
@@ -630,7 +762,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                     </td>
                                     <td className="color-input">
                                         <div>
-                                            <ReactSelect
+                                            {/* <ReactSelect
                                                 value={colors
                                                     .filter(
                                                         (color) =>
@@ -641,7 +773,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                                         label: color.name.toUpperCase(),
                                                         value: color.id,
                                                     }))}
-                                                isDisabled
+                                                isDisabled={!item.isNewRow}
                                                 options={colors.map(
                                                     (color) => ({
                                                         label: color.name.toUpperCase(),
@@ -658,6 +790,31 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                                         },
                                                     });
                                                 }}
+                                            /> */}
+                                            <AsyncCreateSelect
+                                                value={colors
+                                                    .filter(
+                                                        (color) =>
+                                                            color.id ==
+                                                            item.color_id
+                                                    )
+                                                    .map((color) => ({
+                                                        label: color.name.toUpperCase(),
+                                                        value: color.id,
+                                                    }))}
+                                                isDisabled={!item.isNewRow}
+                                                onChange={(e) => {
+                                                    updateState({
+                                                        type: "UPDATE_ITEM",
+                                                        payload: {
+                                                            ...item,
+                                                            color_id: +e!.value,
+                                                            index: index,
+                                                        },
+                                                    });
+                                                }}
+                                                loadOptions={loadColors}
+                                                onCreateOption={addNewColor}
                                             />
                                         </div>
                                     </td>
@@ -825,7 +982,6 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                     <td
                                         style={{
                                             verticalAlign: "middle",
-                                            display: "none",
                                         }}
                                     >
                                         <div className="d-flex align-items-center gap-1">
@@ -853,6 +1009,26 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                         )}
                     </tbody>
                 </Table>
+                <div className="d-flex justify-content-center">
+                    <Button
+                        onClick={() => {
+                            addRow();
+                            setIsRowAdded(true);
+                        }}
+                        variant="dark"
+                        className="d-flex"
+                    >
+                        <box-icon name="plus" color="white"></box-icon>
+                    </Button>
+                </div>
+                <BreakupModal
+                    show={showBreakup}
+                    onHide={() => setShowBreakup(false)}
+                    breakup={breakup}
+                    setBreakup={setBreakup}
+                    total={actual.amount.toFixed(2)}
+                    addSale={edit ? updateSale : addSale}
+                />
             </Modal.Body>
             <Modal.Footer>
                 <span className="me-1" style={{ width: "25%" }}>
@@ -930,18 +1106,26 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                 <Col xs={1}>:</Col>
                                 <Col>
                                     <strong>
-                                    {(actual.amount - dc.amount).toFixed(2)}
+                                        {(actual.amount - dc.amount).toFixed(2)}
                                     </strong>
                                 </Col>
                             </Row>
                         </div>
                     </div>
                 </span>
+                {/* {+actual.amount > 0 && (
+                    <Button onClick={() => {setShowBreakup(true)}} variant="dark">
+                        BREAKUP
+                    </Button>
+                )} */}
                 {loading ? (
                     <box-icon name="loader-alt" animation="spin"></box-icon>
                 ) : (
                     <Button
-                        onClick={edit ? updateSale : addSale}
+                        disabled={actual.weight == 0 || actual.amount == 0}
+                        onClick={() => {
+                            setShowBreakup(true);
+                        }}
                         variant="dark"
                     >
                         {edit ? "UPDATE" : "SAVE"}

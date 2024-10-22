@@ -22,4 +22,9 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
+    public function sale_breakup()
+    {
+        return $this->hasMany(SaleBreakup::class);
+    }
+
 }

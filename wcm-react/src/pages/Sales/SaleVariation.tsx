@@ -36,6 +36,11 @@ type SaleItem = {
     amount: string;
 };
 
+type Breakup = {
+    ledger: string;
+    value: string;
+};
+
 Font.register({
     family: "Roboto",
     fonts: [
@@ -168,6 +173,7 @@ const SaleVariation: React.FC = () => {
         gst: "",
     });
     const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
+    const [breakup, setBreakup] = useState<Breakup[]>([]);
     const { addNotification } = useNotification();
 
     useEffect(() => {
@@ -180,9 +186,10 @@ const SaleVariation: React.FC = () => {
                         },
                     })
                     .then((resp) => {
-                        const { sale, saleItems } = resp.data;
+                        const { sale, saleItems, breakup } = resp.data;
                         setSale(sale);
                         setSaleItems(saleItems);
+                        setBreakup(breakup);
                     })
                     .catch((error: any) => {
                         const {
@@ -227,12 +234,12 @@ const SaleVariation: React.FC = () => {
                     </View>
 
                     {/* Title */}
-                    <View style={styles.title}>
-                        <Text>Sales Variation</Text>
-                    </View>
+                    {/* <View style={styles.title}>
+                        <Text>CUTTING WASTE REPORT</Text>
+                    </View> */}
 
                     {/* Sale Details */}
-                    <View style={styles.twoTitles}>
+                    {/* <View style={styles.twoTitles}>
                         <Text style={styles.sectionTitle}>Bill To</Text>
                         <Text style={styles.sectionTitle}>Invoice Details</Text>
                     </View>
@@ -311,7 +318,12 @@ const SaleVariation: React.FC = () => {
 
                     <View style={[styles.center, styles.sectionTitle]}>
                         <Text>Sale Items</Text>
+                    </View> */}
+
+                    <View style={[styles.center, styles.sectionTitle,{ marginVertical:10 }]}>
+                        <Text>CUTTING WASTE REPORT</Text>
                     </View>
+
                     {/* Sale Items Table */}
                     <View style={styles.tableContainer}>
                         {/* Table Header */}
@@ -319,7 +331,6 @@ const SaleVariation: React.FC = () => {
                             <Text style={[styles.tableCell, { width: "10%" }]}>
                                 S No
                             </Text>
-                            <Text style={styles.tableCell}>Cloth</Text>
                             <Text style={styles.tableCell}>Color</Text>
                             <Text
                                 style={[
@@ -327,7 +338,7 @@ const SaleVariation: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                DC Weight
+                                DC
                             </Text>
                             <Text
                                 style={[
@@ -335,7 +346,15 @@ const SaleVariation: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                Act. Weight
+                                Final
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right" },
+                                ]}
+                            >
+                                Variation
                             </Text>
                             <Text
                                 style={[
@@ -351,15 +370,7 @@ const SaleVariation: React.FC = () => {
                                     { textAlign: "right" },
                                 ]}
                             >
-                                DC Amount
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                Act. Amount
+                                Amount
                             </Text>
                         </View>
 
@@ -370,9 +381,6 @@ const SaleVariation: React.FC = () => {
                                     style={[styles.tableCell, { width: "10%" }]}
                                 >
                                     {item.s_no}
-                                </Text>
-                                <Text style={styles.tableCell}>
-                                    {item.cloth.toUpperCase()}
                                 </Text>
                                 <Text style={styles.tableCell}>
                                     {item.color.toUpperCase()}
@@ -399,7 +407,7 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.rate).toFixed(2)}
+                                    {(+item.actual_weight - +item.weight).toFixed(2)}
                                 </Text>
                                 <Text
                                     style={[
@@ -407,7 +415,7 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.weight * +item.rate).toFixed(2)}
+                                    {(+item.rate).toFixed(2)}
                                 </Text>
                                 <Text
                                     style={[
@@ -424,7 +432,6 @@ const SaleVariation: React.FC = () => {
                             <Text
                                 style={[styles.tableCell, { width: "10%" }]}
                             ></Text>
-                            <Text style={styles.tableCell}></Text>
                             <Text style={styles.tableCell}></Text>
                             <Text
                                 style={[
@@ -453,7 +460,6 @@ const SaleVariation: React.FC = () => {
                                     )
                                     .toFixed(2)}
                             </Text>
-                            <Text style={styles.tableCell}></Text>
                             <Text
                                 style={[
                                     styles.tableCell,
@@ -463,10 +469,24 @@ const SaleVariation: React.FC = () => {
                                 {saleItems
                                     .reduce(
                                         (acc, item) =>
-                                            acc + +item.weight * +item.rate,
+                                            acc + (+item.actual_weight - +item.weight),
                                         0
                                     )
                                     .toFixed(2)}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCell,
+                                    { textAlign: "right", fontWeight: "bold" },
+                                ]}
+                            >
+                                {/* {saleItems
+                                    .reduce(
+                                        (acc, item) =>
+                                            acc + +item.weight * +item.rate,
+                                        0
+                                    )
+                                    .toFixed(2)} */}
                             </Text>
                             <Text
                                 style={[
@@ -542,8 +562,7 @@ const SaleVariation: React.FC = () => {
                         <Text>
                             {(
                                 saleItems.reduce(
-                                    (acc, item) =>
-                                        acc + +item.amount,
+                                    (acc, item) => acc + +item.amount,
                                     0
                                 ) -
                                 saleItems.reduce(

@@ -30,7 +30,6 @@ class UpdateSaleRequest extends FormRequest
             'sale_items' => 'required|array',
             'sale_items.*.cloth_id' => 'required|integer|exists:cloths,id',
             'sale_items.*.color_id' => 'required|integer|exists:colors,id',
-            'sale_items.*.weight' => 'required|numeric',
         ];
     }
 }

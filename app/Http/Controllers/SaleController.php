@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Models\SaleBreakup;
 use App\Models\SaleItem;
 use Illuminate\Support\Facades\DB;
 
@@ -55,8 +56,9 @@ class SaleController extends Controller
         try {
             //code...
             DB::beginTransaction();
-            $masterData = $request->except('sale_items');
+            $masterData = $request->except(['sale_items','breakup']);
             $detailData = $request->sale_items;
+            $breakupData = $request->breakup;
             $master = Sale::create($masterData);
 
             foreach ($detailData as $key => $value) {
@@ -65,13 +67,23 @@ class SaleController extends Controller
                     'sale_id' => $master->id,
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
-                    'weight' => $value['weight'],
+                    'weight' => $value['weight'] == "" ? 0 : $value['weight'],
                     'actual_weight' => $value['actual_weight'] == "" ? 0 : $value['actual_weight'],
                     'rate' => $value['rate'] == "" ? 0 : $value['rate'],
                     'amount' => $value['amount'] == "" ? 0 : $value['amount'],
                     's_no' => $key + 1
                 ]);
             }
+
+            foreach ($breakupData as $key => $value) {
+                SaleBreakup::create([
+                    'sale_id' => $master->id,
+                    'ledger' => $value['ledger'],
+                    'value' => $value['value'],
+                    's_no' => $key + 1
+                ]);
+            }
+
             DB::commit();
             return response()->json(['message' => 'sale created successfully']);
         } catch (\Throwable $th) {
@@ -86,7 +98,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        return response()->json(['sale' => $sale->load('sale_items')]);
+        return response()->json(['sale' => $sale->load(['sale_items','sale_breakup'])]);
     }
 
     /**
@@ -98,23 +110,35 @@ class SaleController extends Controller
         try {
             //code...
             DB::beginTransaction();
-            $masterData = $request->except('sale_items');
+            $masterData = $request->except(['sale_items','breakup']);
             $details = $request->sale_items;
+            $breakupData = $request->breakup;
             $sale->update($masterData);
             SaleItem::where('sale_id', $sale->id)->delete();
+            SaleBreakup::where('sale_id', $sale->id)->delete();
             foreach ($details as $key => $value) {
                 # code...
                 SaleItem::create([
                     'sale_id' => $sale->id,
                     'cloth_id' => $value['cloth_id'],
                     'color_id' => $value['color_id'],
-                    'weight' => $value['weight'],
+                    'weight' => $value['weight'] == "" ? 0 : $value['weight'],
                     'actual_weight' => $value['actual_weight'] == "" ? 0 : $value['actual_weight'],
                     'rate' => $value['rate'] == "" ? 0 : $value['rate'],
                     'amount' => $value['amount'] == "" ? 0 : $value['amount'],
                     's_no' => $key + 1
                 ]);
             }
+
+            foreach ($breakupData as $key => $value) {
+                SaleBreakup::create([
+                    'sale_id' => $sale->id,
+                    'ledger' => $value['ledger'],
+                    'value' => $value['value'],
+                    's_no' => $key + 1
+                ]);
+            }
+
             DB::commit();
             return response()->json(['message' => 'sale updated successfully']);
         } catch (\Throwable $th) {
