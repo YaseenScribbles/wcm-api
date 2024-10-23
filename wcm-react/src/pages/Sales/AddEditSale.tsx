@@ -552,10 +552,19 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
         });
 
         setActual({
-            weight: state.items.reduce(
-                (acc, item) => +item.actual_weight + acc,
-                0
-            ),
+            // weight: state.items.reduce(
+            //     (acc, item) => +item.actual_weight + acc,
+            //     0
+            // ),
+
+            //ignore kithan count
+            //kithan id is 74
+
+            weight: state.items.reduce((acc, item) => {
+                if (item.color_id === 74) return acc;
+                return +item.actual_weight + acc;
+            }, 0),
+
             amount: state.items.reduce((acc, item) => +item.amount + acc, 0),
         });
     }, [state]);

@@ -30,7 +30,7 @@ class SaleController extends Controller
                     DB::raw("c.name as contact"),
                     's.remarks',
                     DB::raw('u.name as [user]'),
-                    DB::raw('sum(si.actual_weight) as weight')
+                    DB::raw('SUM(CASE WHEN si.color_id = 74 THEN 0 ELSE si.actual_weight END) as weight')
                 );
 
 

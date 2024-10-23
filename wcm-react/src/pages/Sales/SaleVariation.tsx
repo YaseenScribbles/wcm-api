@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto",
         fontWeight: "bold",
         fontSize: 12,
-        marginBottom: 5,
+        // marginBottom: 5,
         borderBottom: 1,
         paddingBottom: 3,
         backgroundColor: "#D3D3D3",
@@ -110,14 +110,18 @@ const styles = StyleSheet.create({
         marginBottom: 3,
         display: "flex",
         flexDirection: "row",
+        borderBottom: "1 solid #999",
     },
     tableContainer: {
         marginBottom: 20,
     },
     tableCell: {
-        width: "20%",
+        width: "15%",
         textAlign: "left",
         padding: 3,
+        // border: "1 solid #333"
+        // borderLeft:"1 solid #999",
+        // borderRight: "1 solid #999"
     },
     tableFooter: {
         borderTop: 1,
@@ -157,7 +161,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: "5",
     },
+    lastRow: {
+        borderBottom: "none",
+    },
 });
+
+const ITEM_PER_PAGE = 26;
 
 // PDF Document Component
 const SaleVariation: React.FC = () => {
@@ -179,6 +188,8 @@ const SaleVariation: React.FC = () => {
     const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
     const [breakup, setBreakup] = useState<Breakup[]>([]);
     const { addNotification } = useNotification();
+    // const chunkedItems: SaleItem[][] = [];
+    const [chunkedItems, setChunkedItems] = useState<SaleItem[][]>([]);
 
     useEffect(() => {
         if (+params.id! > 0) {
@@ -191,6 +202,17 @@ const SaleVariation: React.FC = () => {
                     })
                     .then((resp) => {
                         const { sale, saleItems, breakup } = resp.data;
+                        let chunkedItems: SaleItem[][] = [];
+                        for (
+                            let index = 0;
+                            index < saleItems.length;
+                            index += ITEM_PER_PAGE
+                        ) {
+                            chunkedItems.push(
+                                saleItems.slice(index, index + ITEM_PER_PAGE)
+                            );
+                        }
+                        setChunkedItems(chunkedItems);
                         setSale(sale);
                         setSaleItems(saleItems);
                         setBreakup(breakup);
@@ -223,180 +245,59 @@ const SaleVariation: React.FC = () => {
             }}
         >
             <Document>
-                <Page style={styles.page}>
-                    {/* {Company Name} */}
-                    <View style={styles.companyName}>
-                        <Text>ESSA GARMENTS PRIVATE LIMITED</Text>
-                    </View>
+                {chunkedItems.map((items, pageIndex) => (
+                    <Page key={pageIndex} size={"A4"} style={styles.page}>
+                        {pageIndex === 0 && (
+                            <View style={styles.companyName}>
+                                <Text>ESSA GARMENTS PRIVATE LIMITED</Text>
+                            </View>
+                        )}
 
-                    {/* {Company Address} */}
-                    <View style={[styles.center, styles.text]}>
-                        <Text>
-                            NO. 21, VENKATESAIYA COLONY, KANGEYAM ROAD, TIRUPUR
-                            - 641604
-                        </Text>
-                    </View>
+                        {/* {Company Address} */}
+                        {pageIndex === 0 && (
+                            <View style={[styles.center, styles.text]}>
+                                <Text>
+                                    NO. 21, VENKATESAIYA COLONY, KANGEYAM ROAD,
+                                    TIRUPUR - 641604
+                                </Text>
+                            </View>
+                        )}
 
-                    {/* Title */}
-                    {/* <View style={styles.title}>
-                        <Text>CUTTING WASTE REPORT</Text>
-                    </View> */}
-
-                    {/* Sale Details */}
-                    {/* <View style={styles.twoTitles}>
-                        <Text style={styles.sectionTitle}>Bill To</Text>
-                        <Text style={styles.sectionTitle}>Invoice Details</Text>
-                    </View>
-                    <View>
-                        <View style={styles.columns}>
-                            <Text style={styles.heading}>Name</Text>
-                            <Text style={styles.master}>
-                                {sale.name.toUpperCase()}
-                            </Text>
-                            <Text
+                        {pageIndex === 0 && (
+                            <View
                                 style={[
-                                    styles.heading,
-                                    { marginLeft: "auto", width: "50" },
+                                    styles.center,
+                                    styles.sectionTitle,
+                                    { marginVertical: 10 },
                                 ]}
                             >
-                                Inv. No
-                            </Text>
-                            <Text style={styles.colon}></Text>
-                            <Text style={[styles.master, { width: "40" }]}>
-                                {sale.no}
-                            </Text>
-                        </View>
+                                <Text>
+                                    CUTTING WASTE REPORT (
+                                    {new Date(
+                                        sale.ref_date
+                                    ).toLocaleDateString()}
+                                    )
+                                </Text>
+                            </View>
+                        )}
 
-                        <View style={styles.columns}>
-                            <Text style={styles.heading}>Address</Text>
-                            <Text
-                                style={[
-                                    styles.master,
-                                    {
-                                        display: "flex",
-                                        flexWrap: "nowrap",
-                                        textOverflow: "ellipsis",
-                                        overflow: "hidden",
-                                    },
-                                ]}
-                            >
-                                {sale.address && sale.address.toUpperCase() + ", "}
-                                {sale.city && sale.city.toUpperCase() + "-"}
-                                {sale.pincode && sale.pincode}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.heading,
-                                    { marginLeft: "auto", width: "50" },
-                                ]}
-                            >
-                                Inv. Date
-                            </Text>
-                            <Text style={styles.colon}></Text>
-                            <Text style={[styles.master, { width: "40" }]}>
-                                {new Date(sale.date).toLocaleDateString()}
-                            </Text>
-                        </View>
-
-                        <View style={styles.columns}>
-                            <Text style={styles.heading}>Phone</Text>
-                            <Text style={styles.master}>
-                                {sale.phone && sale.phone}
-                            </Text>
-                        </View>
-
-                        <View style={styles.columns}>
-                            <Text style={styles.heading}>Gst</Text>
-                            <Text style={styles.master}>
-                                {sale.gst && sale.gst.toUpperCase()}
-                            </Text>
-                        </View>
-
-                        <View style={styles.columns}>
-                            <Text style={styles.heading}>Remarks</Text>
-                            <Text style={styles.master}>
-                                {sale.remarks && sale.remarks.toUpperCase()}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <View style={[styles.center, styles.sectionTitle]}>
-                        <Text>Sale Items</Text>
-                    </View> */}
-
-                    <View
-                        style={[
-                            styles.center,
-                            styles.sectionTitle,
-                            { marginVertical: 10 },
-                        ]}
-                    >
-                        <Text>
-                            CUTTING WASTE REPORT (
-                            {new Date(sale.ref_date).toLocaleDateString()})
-                        </Text>
-                    </View>
-
-                    {/* Sale Items Table */}
-                    <View style={styles.tableContainer}>
-                        {/* Table Header */}
-                        <View style={[styles.tableRow, styles.tableHeader]}>
-                            <Text style={[styles.tableCell, { width: "10%" }]}>
-                                S No
-                            </Text>
-                            <Text style={styles.tableCell}>Color</Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                DC
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                Final
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                Variation
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                Rate
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                Amount
-                            </Text>
-                        </View>
-
-                        {/* Table Rows */}
-                        {saleItems.map((item, index) => (
-                            <View key={index} style={styles.tableRow}>
+                        {/* Sale Items Table */}
+                        <View style={styles.tableContainer}>
+                            {/* Table Header */}
+                            <View style={[styles.tableRow, styles.tableHeader]}>
                                 <Text
                                     style={[styles.tableCell, { width: "10%" }]}
                                 >
-                                    {item.s_no}
+                                    S No
                                 </Text>
-                                <Text style={styles.tableCell}>
-                                    {item.color.toUpperCase()}
+                                <Text style={styles.tableCell}>Color</Text>
+                                <Text
+                                    style={[
+                                        styles.tableCell,
+                                        { textAlign: "right", width: "20%" },
+                                    ]}
+                                >
+                                    DC
                                 </Text>
                                 <Text
                                     style={[
@@ -404,7 +305,7 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.weight).toFixed(2)}
+                                    Final
                                 </Text>
                                 <Text
                                     style={[
@@ -412,7 +313,7 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.actual_weight).toFixed(2)}
+                                    Variation
                                 </Text>
                                 <Text
                                     style={[
@@ -420,9 +321,7 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(
-                                        +item.actual_weight - +item.weight
-                                    ).toFixed(2)}
+                                    Rate
                                 </Text>
                                 <Text
                                     style={[
@@ -430,211 +329,210 @@ const SaleVariation: React.FC = () => {
                                         { textAlign: "right" },
                                     ]}
                                 >
-                                    {(+item.rate).toFixed(2)}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.tableCell,
-                                        { textAlign: "right" },
-                                    ]}
-                                >
-                                    {(+item.amount).toFixed(2)}
+                                    Amount
                                 </Text>
                             </View>
-                        ))}
 
-                        <View style={[styles.tableFooter, styles.tableRow]}>
-                            <Text
-                                style={[styles.tableCell, { width: "10%" }]}
-                            ></Text>
-                            <Text style={styles.tableCell}></Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right", fontWeight: "bold" },
-                                ]}
-                            >
-                                {saleItems
-                                    .reduce(
-                                        (acc, item) => acc + +item.weight,
-                                        0
-                                    )
-                                    .toFixed(2)}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right", fontWeight: "bold" },
-                                ]}
-                            >
-                                {saleItems
-                                    .reduce(
-                                        (acc, item) =>
-                                            acc + +item.actual_weight,
-                                        0
-                                    )
-                                    .toFixed(2)}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right", fontWeight: "bold" },
-                                ]}
-                            >
-                                {saleItems
-                                    .reduce(
-                                        (acc, item) =>
-                                            acc +
-                                            (+item.actual_weight -
-                                                +item.weight),
-                                        0
-                                    )
-                                    .toFixed(2)}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right", fontWeight: "bold" },
-                                ]}
-                            >
-                                {/* {saleItems
-                                    .reduce(
-                                        (acc, item) =>
-                                            acc + +item.weight * +item.rate,
-                                        0
-                                    )
-                                    .toFixed(2)} */}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right", fontWeight: "bold" },
-                                ]}
-                            >
-                                {saleItems
-                                    .reduce(
-                                        (acc, item) => acc + +item.amount,
-                                        0
-                                    )
-                                    .toFixed(2)}
-                            </Text>
-                        </View>
-                    </View>
-                    {/* <View
-                        style={[
-                            styles.sectionTitle,
-                            {
-                                width:"50%",
-                                marginLeft:"auto",
-                            },
-                        ]}
-                    >
-                        <Text>BREAKUP</Text>
-                    </View> */}
-                    {breakup.map((b, index) => (
-                        <View
-                            key={index}
-                            style={[
-                                styles.summary,
-                                {
-                                    width: "50%",
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    marginLeft: "auto",
-                                    marginVertical: "2",
-                                    padding: "5",
-                                },
-                            ]}
-                        >
-                            <Text>{b.ledger.toUpperCase()}</Text>
-                            <Text>{(+b.value).toFixed(2)}</Text>
-                        </View>
-                    ))}
+                            {/* Table Rows */}
+                            {items.map((item: SaleItem, index) => (
+                                <View
+                                    key={index}
+                                    style={[
+                                        styles.tableRow,
+                                        index === items.length - 1
+                                            ? styles.lastRow
+                                            : {},
+                                    ]}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { width: "10%" },
+                                        ]}
+                                    >
+                                        {item.s_no}
+                                    </Text>
+                                    <Text style={[styles.tableCell, { width: "20%" }]}>
+                                        {item.color.toUpperCase()}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { textAlign: "right" },
+                                        ]}
+                                    >
+                                        {(+item.weight).toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { textAlign: "right" },
+                                        ]}
+                                    >
+                                        {(+item.actual_weight).toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { textAlign: "right" },
+                                        ]}
+                                    >
+                                        {(
+                                            +item.actual_weight - +item.weight
+                                        ).toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { textAlign: "right" },
+                                        ]}
+                                    >
+                                        {(+item.rate).toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { textAlign: "right" },
+                                        ]}
+                                    >
+                                        {(+item.amount).toFixed(2)}
+                                    </Text>
+                                </View>
+                            ))}
 
-                    <View
-                        style={[
-                            styles.center,
-                            styles.sectionTitle,
-                            {
-                                marginVertical: "10",
-                                padding:"5",
-                                borderBottom: "1 solid #333",
-                            },
-                        ]}
-                    >
-                        <Text>SUMMARY</Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>DC Weight</Text>
-                        <Text>
-                            {saleItems
-                                .reduce((acc, item) => acc + +item.weight, 0)
-                                .toFixed(2)}
-                        </Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>DC Amount</Text>
-                        <Text>
-                            {saleItems
-                                .reduce(
-                                    (acc, item) =>
-                                        acc + +item.rate * +item.weight,
-                                    0
-                                )
-                                .toFixed(2)}
-                        </Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>Final Weight</Text>
-                        <Text>
-                            {saleItems
-                                .reduce(
-                                    (acc, item) => acc + +item.actual_weight,
-                                    0
-                                )
-                                .toFixed(2)}
-                        </Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>Final Amount</Text>
-                        <Text>
-                            {saleItems
-                                .reduce((acc, item) => acc + +item.amount, 0)
-                                .toFixed(2)}
-                        </Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>Variation (In Weight)</Text>
-                        <Text>
-                            {(
-                                saleItems.reduce(
-                                    (acc, item) => acc + +item.actual_weight,
-                                    0
-                                ) -
-                                saleItems.reduce(
-                                    (acc, item) => acc + +item.weight,
-                                    0
-                                )
-                            ).toFixed(2)}
-                        </Text>
-                    </View>
-                    <View style={styles.summary}>
-                        <Text>Variation (In Amount)</Text>
-                        <Text>
-                            {(
-                                saleItems.reduce(
-                                    (acc, item) => acc + +item.amount,
-                                    0
-                                ) -
-                                saleItems.reduce(
-                                    (acc, item) =>
-                                        acc + +item.rate * +item.weight,
-                                    0
-                                )
-                            ).toFixed(2)}
-                        </Text>
-                    </View>
-                </Page>
+                            {pageIndex === chunkedItems.length - 1 && (
+                                <View
+                                    style={[
+                                        styles.tableFooter,
+                                        styles.tableRow,
+                                    ]}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            { width: "10%" },
+                                        ]}
+                                    ></Text>
+                                    <Text style={styles.tableCell}></Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            {
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            },
+                                        ]}
+                                    >
+                                        {saleItems
+                                            .reduce(
+                                                (acc, item) =>
+                                                    acc + +item.weight,
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            {
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            },
+                                        ]}
+                                    >
+                                        {saleItems
+                                            .reduce((acc, item) => {
+                                                //ignore kithan bags
+                                                if (
+                                                    item.color.toLowerCase() ===
+                                                    "kithan"
+                                                )
+                                                    return acc;
+
+                                                return (
+                                                    acc + +item.actual_weight
+                                                );
+                                            }, 0)
+                                            .toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            {
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            },
+                                        ]}
+                                    >
+                                        {saleItems
+                                            .reduce((acc, item) => {
+                                                //ignore kithan
+                                                if (
+                                                    item.color.toLowerCase() ===
+                                                    "kithan"
+                                                )
+                                                    return acc;
+
+                                                return (
+                                                    acc +
+                                                    (+item.actual_weight -
+                                                        +item.weight)
+                                                );
+                                            }, 0)
+                                            .toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            {
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            },
+                                        ]}
+                                    ></Text>
+                                    <Text
+                                        style={[
+                                            styles.tableCell,
+                                            {
+                                                textAlign: "right",
+                                                fontWeight: "bold",
+                                            },
+                                        ]}
+                                    >
+                                        {saleItems
+                                            .reduce(
+                                                (acc, item) =>
+                                                    acc + +item.amount,
+                                                0
+                                            )
+                                            .toFixed(2)}
+                                    </Text>
+                                </View>
+                            )}
+                        </View>
+
+                        {pageIndex === chunkedItems.length - 1 &&
+                            breakup.map((b, index) => (
+                                <View
+                                    key={index}
+                                    style={[
+                                        styles.summary,
+                                        {
+                                            width: "50%",
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            marginLeft: "auto",
+                                            marginVertical: "2",
+                                            padding: "5",
+                                        },
+                                    ]}
+                                >
+                                    <Text>{b.ledger.toUpperCase()}</Text>
+                                    <Text>{(+b.value).toFixed(2)}</Text>
+                                </View>
+                            ))}
+                    </Page>
+                ))}
             </Document>
         </PDFViewer>
     );
