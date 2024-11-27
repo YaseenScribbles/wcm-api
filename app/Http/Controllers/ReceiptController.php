@@ -6,6 +6,7 @@ use App\Models\Receipt;
 use App\Models\ReceiptItem;
 use App\Http\Requests\StoreReceiptRequest;
 use App\Http\Requests\UpdateReceiptRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -14,7 +15,7 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             //code...
@@ -35,8 +36,11 @@ class ReceiptController extends Controller
 
 
             //if any conditions add them
+            if ($request->query('query')) {
+                $sql->where('r.id', 'like', '%' . $request->query('query') . '%');
+            }
 
-            $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name');
+            $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name')->orderBy('r.id');
 
             $receipts = $sql->paginate(10);
 
@@ -71,7 +75,7 @@ class ReceiptController extends Controller
                 ]);
             }
             DB::commit();
-            return response()->json(['message' => 'receipt created successfully','id' => $master->id, 'date' => $master->created_at]);
+            return response()->json(['message' => 'receipt created successfully', 'id' => $master->id, 'date' => $master->created_at]);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();

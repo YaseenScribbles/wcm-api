@@ -39,11 +39,12 @@ const Receipt: React.FC = () => {
     const { menus } = useUserContext();
     const [ showAlert, setShowAlert ] = useState(false);
     const [ alertId, setAlertId ] = useState<number>(0);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const getReceipts = async (page: number = 1) => {
+    const getReceipts = async (page: number = 1, query = "") => {
         try {
             setLoading(true);
-            const result = await axios.get(`${API_URL}receipt?page=${page}`);
+            const result = await axios.get(`${API_URL}receipt?page=${page}&query=${query}`);
             const { data, total } = result.data.receipts;
             setReceipts(data);
             setTotalRecords(total);
@@ -78,7 +79,7 @@ const Receipt: React.FC = () => {
                 message: message,
                 type: "success",
             });
-            getReceipts(currentPage);
+            getReceipts(currentPage, searchTerm);
         } catch (error: any) {
             const {
                 response: {
@@ -95,8 +96,8 @@ const Receipt: React.FC = () => {
     };
 
     useEffect(() => {
-        getReceipts(currentPage);
-    }, [currentPage]);
+        getReceipts(currentPage, searchTerm);
+    }, [currentPage, searchTerm]);
 
     return (
         <Container fluid>
@@ -104,6 +105,9 @@ const Receipt: React.FC = () => {
                 title="RECEIPT"
                 buttonText="ADD RECEIPT"
                 buttonFunction={() => setShowModal(true)}
+                isSearchable={true}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
             />
             <hr />
             <Card className="p-2">
@@ -236,7 +240,7 @@ const Receipt: React.FC = () => {
                 <AddEditModal
                     show={showModal}
                     edit={editMode}
-                    onSave={() => getReceipts(currentPage)}
+                    onSave={() => getReceipts(currentPage, searchTerm)}
                     onClose={() => {
                         setShowModal(false);
                         setEditMode(false);

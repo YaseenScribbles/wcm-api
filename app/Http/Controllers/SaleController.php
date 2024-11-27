@@ -36,7 +36,7 @@ class SaleController extends Controller
 
             //if any conditions add them
 
-            $sql->groupBy('s.id', 's.created_at', 's.ref_no', 's.ref_date', 's.remarks', 'u.name', 'c.name');
+            $sql->groupBy('s.id', 's.created_at', 's.ref_no', 's.ref_date', 's.remarks', 'u.name', 'c.name')->orderBy('s.id');
 
             $sales = $sql->paginate(10);
 
