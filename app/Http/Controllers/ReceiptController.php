@@ -37,7 +37,7 @@ class ReceiptController extends Controller
 
             //if any conditions add them
             if ($request->query('query')) {
-                $sql->where('r.id', 'like', '%' . $request->query('query') . '%');
+                $sql->where('r.id', $request->query('query'));
             }
 
             $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name')->orderBy('r.id');

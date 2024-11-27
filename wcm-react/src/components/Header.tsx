@@ -21,22 +21,29 @@ const Header: React.FC<HeaderProps> = ({
     secondButtonText,
     isSearchable,
     searchTerm,
-    setSearchTerm
+    setSearchTerm,
 }) => {
     return (
         <Card className="mt-2 p-2 title" bg="light">
             <div className="d-flex justify-content-between align-items-center">
                 <div className="h3 my-auto">{title}</div>
-                <div className="d-flex gap-1 align-items-center">
-                    {
-                        isSearchable && (<>
-                            <Form.Control id="searchTerm" placeholder="Search" value={searchTerm || ""} onChange={(e) => setSearchTerm?.(e.target.value) } />
-                        </>)
-                    }
+                <div className="d-flex gap-2 align-items-center">
+                    {isSearchable && (
+                        <>
+                            <Form.Control
+                                id="searchTerm"
+                                placeholder="Search"
+                                value={searchTerm || ""}
+                                onChange={(e) =>
+                                    setSearchTerm?.(e.target.value)
+                                }
+                            />
+                        </>
+                    )}
                     {buttonText && (
                         <Button
                             variant="dark"
-                            className="d-flex gap-1 w-100"
+                            className={`d-flex gap-1 ${isSearchable ? "w-75" : ""}`}
                             onClick={buttonFunction}
                         >
                             <box-icon
