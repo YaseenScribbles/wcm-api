@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
                     {buttonText && (
                         <Button
                             variant="dark"
-                            className="d-flex gap-1 w-75"
+                            className="d-flex gap-1 w-100"
                             onClick={buttonFunction}
                         >
                             <box-icon
