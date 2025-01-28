@@ -32,7 +32,7 @@ Font.register({
 // Create styles
 const styles = StyleSheet.create({
     page: {
-        padding: 30,
+        padding: 10,
     },
     companyName: {
         fontFamily: "Roboto",
@@ -139,14 +139,14 @@ type StockProps = {
 const StockDocument: React.FC<StockProps> = ({ stock }) => {
     return (
         <Document>
-            <Page style={styles.page}>
+            <Page style={styles.page} break>
                 {/* {Company Name} */}
-                <View style={styles.companyName}>
+                <View style={styles.companyName} fixed>
                     <Text>ESSA GARMENTS PRIVATE LIMITED</Text>
                 </View>
 
                 {/* {Company Address} */}
-                <View style={[styles.center, styles.text]}>
+                <View style={[styles.center, styles.text]} fixed>
                     <Text>
                         NO. 21, VENKATESAIYA COLONY, KANGEYAM ROAD, TIRUPUR -
                         641604
@@ -154,7 +154,7 @@ const StockDocument: React.FC<StockProps> = ({ stock }) => {
                 </View>
 
                 {/* Title */}
-                <View style={styles.title}>
+                <View style={styles.title} fixed>
                     <Text>Stock Report</Text>
                 </View>
 
