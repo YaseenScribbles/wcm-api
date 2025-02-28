@@ -1,4 +1,11 @@
+import React from "react";
 import { Button, Card, Form } from "react-bootstrap";
+import { format } from "date-fns";
+
+type Duration = {
+    fromDate: string;
+    toDate: string;
+};
 
 type HeaderProps = {
     title: string;
@@ -10,6 +17,8 @@ type HeaderProps = {
     searchTerm?: string;
     setSearchTerm?: React.Dispatch<React.SetStateAction<string>>;
     isSearchable?: boolean;
+    duration?: Duration;
+    setDuration?: React.Dispatch<React.SetStateAction<Duration>>;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -22,6 +31,8 @@ const Header: React.FC<HeaderProps> = ({
     isSearchable,
     searchTerm,
     setSearchTerm,
+    duration,
+    setDuration,
 }) => {
     return (
         <Card className="mt-2 p-2 title" bg="light">
@@ -38,12 +49,44 @@ const Header: React.FC<HeaderProps> = ({
                                     setSearchTerm?.(e.target.value)
                                 }
                             />
+                            <Form.Control
+                                id="fromDate"
+                                type="date"
+                                value={duration?.fromDate}
+                                onChange={(e) =>
+                                    setDuration &&
+                                    setDuration((p) => ({
+                                        ...p,
+                                        fromDate: format(
+                                            e.target.value,
+                                            "yyyy-MM-dd"
+                                        ),
+                                    }))
+                                }
+                            />
+                            <Form.Control
+                                id="toDate"
+                                type="date"
+                                value={duration?.toDate}
+                                onChange={(e) =>
+                                    setDuration &&
+                                    setDuration((p) => ({
+                                        ...p,
+                                        toDate: format(
+                                            e.target.value,
+                                            "yyyy-MM-dd"
+                                        ),
+                                    }))
+                                }
+                            />
                         </>
                     )}
                     {buttonText && (
                         <Button
                             variant="dark"
-                            className={`d-flex gap-1 ${isSearchable ? "w-75" : ""}`}
+                            className={`d-flex gap-1 ${
+                                isSearchable ? "w-100" : ""
+                            }`}
                             onClick={buttonFunction}
                         >
                             <box-icon

@@ -23,6 +23,7 @@ class ReceiptController extends Controller
                 ->join('receipt_items as ri', 'r.id', '=', 'ri.receipt_id')
                 ->join('users as u', 'r.user_id', '=', 'u.id')
                 ->join('contacts as c', 'c.id', '=', 'r.contact_id')
+                ->whereRaw("convert(date, r.created_at) between ? and ?", [$request->query('from'), $request->query('to')])
                 ->select(
                     'r.id',
                     DB::raw('convert(date,r.created_at) as date'),
@@ -37,7 +38,8 @@ class ReceiptController extends Controller
 
             //if any conditions add them
             if ($request->query('query')) {
-                $sql->where('r.id', $request->query('query'));
+                $sql->where('r.id', $request->query('query'))
+                    ->orWhere('r.ref_no', 'like', '%' . $request->query('query') . '%');
             }
 
             $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name')->orderBy('r.id');

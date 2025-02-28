@@ -14,6 +14,7 @@ import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditReceipt"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 import YesNoModal from "../../components/YesNoModal";
+import { format } from "date-fns";
 
 type Receipt = {
     id: number;
@@ -24,6 +25,11 @@ type Receipt = {
     remarks: string;
     user: string;
     weight: string;
+};
+
+type Duration = {
+    fromDate: string;
+    toDate: string;
 };
 
 const Receipt: React.FC = () => {
@@ -37,17 +43,24 @@ const Receipt: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
     const { menus } = useUserContext();
-    const [ showAlert, setShowAlert ] = useState(false);
-    const [ alertId, setAlertId ] = useState<number>(0);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertId, setAlertId] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const [duration, setDuration] = useState<Duration>({
+        fromDate: format(new Date(), "yyyy-MM-dd"),
+        toDate: format(new Date(), "yyyy-MM-dd"),
+    });
 
     const getReceipts = async (page: number = 1, query = "") => {
         try {
             setLoading(true);
-            const result = await axios.get(`${API_URL}receipt?page=${page}&query=${query}`);
+            const result = await axios.get(
+                `${API_URL}receipt?page=${page}&query=${query}&from=${duration.fromDate}&to=${duration.toDate}`
+            );
             const { data, total } = result.data.receipts;
             setReceipts(data);
             setTotalRecords(total);
+            if (query) setCurrentPage(1);
             const lastPage = Math.ceil(total / 10);
             setLastPage(lastPage);
         } catch (error: any) {
@@ -108,6 +121,8 @@ const Receipt: React.FC = () => {
                 isSearchable={true}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
+                duration={duration}
+                setDuration={setDuration}
             />
             <hr />
             <Card className="p-2">
@@ -170,7 +185,11 @@ const Receipt: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            !menus.find(menu => menu.name === "RECEIPT")?.edit
+                                                            !menus.find(
+                                                                (menu) =>
+                                                                    menu.name ===
+                                                                    "RECEIPT"
+                                                            )?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -189,7 +208,11 @@ const Receipt: React.FC = () => {
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            !menus.find(menu => menu.name === "RECEIPT")?.delete
+                                                            !menus.find(
+                                                                (menu) =>
+                                                                    menu.name ===
+                                                                    "RECEIPT"
+                                                            )?.delete
                                                         ) {
                                                             addNotification({
                                                                 message:
@@ -198,7 +221,7 @@ const Receipt: React.FC = () => {
                                                             });
                                                             return;
                                                         }
-                                                        setAlertId(receipt.id)
+                                                        setAlertId(receipt.id);
                                                         setShowAlert(true);
                                                     }}
                                                     name="x"
@@ -248,7 +271,12 @@ const Receipt: React.FC = () => {
                     editId={editId}
                 />
             </Suspense>
-            <YesNoModal show={showAlert} onHide={() =>  setShowAlert(false)} onYes={() => deleteReceipt(alertId)} onNo={() => setShowAlert(false)} />
+            <YesNoModal
+                show={showAlert}
+                onHide={() => setShowAlert(false)}
+                onYes={() => deleteReceipt(alertId)}
+                onNo={() => setShowAlert(false)}
+            />
         </Container>
     );
 };
