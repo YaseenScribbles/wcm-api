@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({
                         <>
                             <Form.Control
                                 id="searchTerm"
-                                placeholder="Search"
+                                placeholder="R. No / Ref. No"
                                 value={searchTerm || ""}
                                 onChange={(e) =>
                                     setSearchTerm?.(e.target.value)

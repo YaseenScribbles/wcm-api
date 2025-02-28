@@ -60,7 +60,6 @@ const Receipt: React.FC = () => {
             const { data, total } = result.data.receipts;
             setReceipts(data);
             setTotalRecords(total);
-            if (query) setCurrentPage(1);
             const lastPage = Math.ceil(total / 10);
             setLastPage(lastPage);
         } catch (error: any) {
@@ -110,7 +109,12 @@ const Receipt: React.FC = () => {
 
     useEffect(() => {
         getReceipts(currentPage, searchTerm);
-    }, [currentPage, searchTerm]);
+    }, [currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1)
+        getReceipts(1, searchTerm);
+    }, [searchTerm, duration]);
 
     return (
         <Container fluid>
