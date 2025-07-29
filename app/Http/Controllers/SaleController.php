@@ -30,13 +30,14 @@ class SaleController extends Controller
                     DB::raw("c.name as contact"),
                     's.remarks',
                     DB::raw('u.name as [user]'),
-                    DB::raw('SUM(CASE WHEN si.color_id = 74 THEN 0 ELSE si.actual_weight END) as weight')
+                    DB::raw('SUM(CASE WHEN si.color_id = 74 THEN 0 ELSE si.actual_weight END) as weight'),
+                    's.sale_no'
                 );
 
 
             //if any conditions add them
 
-            $sql->groupBy('s.id', 's.created_at', 's.ref_no', 's.ref_date', 's.remarks', 'u.name', 'c.name')->orderBy('s.id');
+            $sql->groupBy('s.id', 's.created_at', 's.ref_no', 's.ref_date', 's.remarks', 'u.name', 'c.name', 's.sale_no')->orderBy('s.id');
 
             $sales = $sql->paginate(10);
 

@@ -14,9 +14,10 @@ import { useUserContext } from "../../contexts/UserContext";
 const AddEditModal = lazy(() => import("./AddEditReceipt"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 import YesNoModal from "../../components/YesNoModal";
-import { format } from "date-fns";
+import { format, startOfMonth } from "date-fns";
 
 type Receipt = {
+    r_no: number;
     id: number;
     date: string;
     ref_no: string;
@@ -47,7 +48,7 @@ const Receipt: React.FC = () => {
     const [alertId, setAlertId] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [duration, setDuration] = useState<Duration>({
-        fromDate: format(new Date(), "yyyy-MM-dd"),
+        fromDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
         toDate: format(new Date(), "yyyy-MM-dd"),
     });
 
@@ -152,10 +153,10 @@ const Receipt: React.FC = () => {
                                 </td>
                             </tr>
                         ) : (
-                            receipts.map((receipt, index) => {
+                            receipts.map((receipt) => {
                                 return (
-                                    <tr key={index}>
-                                        <td>{receipt.id}</td>
+                                    <tr key={receipt.id}>
+                                        <td>{receipt.r_no}</td>
                                         <td>
                                             {new Date(
                                                 receipt.date

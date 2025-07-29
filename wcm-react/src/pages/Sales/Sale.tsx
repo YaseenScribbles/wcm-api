@@ -24,6 +24,7 @@ type Sale = {
     remarks: string;
     user: string;
     weight: string;
+    sale_no: number;
 };
 
 const Sale: React.FC = () => {
@@ -129,10 +130,10 @@ const Sale: React.FC = () => {
                                 </td>
                             </tr>
                         ) : (
-                            sales.map((sale, index) => {
+                            sales.map((sale) => {
                                 return (
-                                    <tr key={index}>
-                                        <td>{sale.id}</td>
+                                    <tr key={sale.id}>
+                                        <td>{sale.sale_no}</td>
                                         <td>
                                             {new Date(
                                                 sale.date

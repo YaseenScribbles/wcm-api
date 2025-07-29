@@ -32,7 +32,8 @@ class ReceiptController extends Controller
                     DB::raw("c.name as contact"),
                     'r.remarks',
                     DB::raw('u.name as [user]'),
-                    DB::raw('sum(ri.weight) as weight')
+                    DB::raw('sum(ri.weight) as weight'),
+                    'r.r_no'
                 );
 
 
@@ -42,7 +43,7 @@ class ReceiptController extends Controller
                     ->orWhere('r.ref_no', 'like', '%' . $request->query('query') . '%');
             }
 
-            $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name')->orderBy('r.id');
+            $sql->groupBy('r.id', 'r.created_at', 'r.ref_no', 'r.ref_date', 'r.remarks', 'u.name', 'c.name', 'r.r_no')->orderBy('r.id');
 
             $receipts = $sql->paginate(10);
 
