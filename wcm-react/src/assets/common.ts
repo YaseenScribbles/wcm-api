@@ -4,5 +4,5 @@ export const Status = {
     failure: "FAILURE"
 }
 
-// export const API_URL = "http://192.168.10.220/wcm/api/"
-export const API_URL = "http://127.0.0.1:8000/api/" //Local
+export const API_URL = "http://192.168.10.220/wcm/api/"
+// export const API_URL = "http://127.0.0.1:8000/api/"
