@@ -12,6 +12,7 @@ type Color = {
     id: number;
     name: string;
     active: string;
+    created_at: string;
     user: {
         name: string;
     };
@@ -110,13 +111,14 @@ const Color = () => {
                             <th>Name</th>
                             <th>Active</th>
                             <th>Created By</th>
+                            <th>Created On</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td className="text-center" colSpan={5}>
+                                <td className="text-center" colSpan={6}>
                                     Loading...
                                 </td>
                             </tr>
@@ -134,6 +136,7 @@ const Color = () => {
                                             : "NOT ACTIVE"}
                                     </td>
                                     <td>{color.user.name.toUpperCase()}</td>
+                                    <td>{new Date(color.created_at).toLocaleDateString()}</td>
                                     <td>
                                         <div className="d-flex align-items-center gap-1">
                                             <box-icon

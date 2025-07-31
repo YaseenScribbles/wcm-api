@@ -26,6 +26,7 @@ type Contact = {
     user: {
         name: string;
     };
+    created_at: string;
 };
 
 const Contact: React.FC = () => {
@@ -38,7 +39,7 @@ const Contact: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState<number>();
-    const { menus } = useUserContext()
+    const { menus } = useUserContext();
 
     const getContacts = async (page: number = 1) => {
         try {
@@ -135,13 +136,14 @@ const Contact: React.FC = () => {
                             <th>PHONE</th>
                             <th>ACTIVE</th>
                             <th>CREATED BY</th>
+                            <th>CREATED ON</th>
                             <th>ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={8} className="text-center">
+                                <td colSpan={9} className="text-center">
                                     Loading...
                                 </td>
                             </tr>
@@ -193,11 +195,18 @@ const Contact: React.FC = () => {
                                             {contact.user.name.toUpperCase()}
                                         </td>
                                         <td>
+                                            {new Date(contact.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td>
                                             <div className="d-flex align-items-center gap-1">
                                                 <box-icon
                                                     onClick={() => {
                                                         if (
-                                                            !menus.find(menu => menu.name === "CONTACT")?.edit
+                                                            !menus.find(
+                                                                (menu) =>
+                                                                    menu.name ===
+                                                                    "CONTACT"
+                                                            )?.edit
                                                         ) {
                                                             addNotification({
                                                                 message:

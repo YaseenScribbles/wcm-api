@@ -39,7 +39,7 @@ class ReceiptController extends Controller
 
             //if any conditions add them
             if ($request->query('query')) {
-                $sql->where('r.id', $request->query('query'))
+                $sql->where('r.r_no', $request->query('query'))
                     ->orWhere('r.ref_no', 'like', '%' . $request->query('query') . '%');
             }
 
