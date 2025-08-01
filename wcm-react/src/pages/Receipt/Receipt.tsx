@@ -15,6 +15,7 @@ const AddEditModal = lazy(() => import("./AddEditReceipt"));
 const CustomPagination = lazy(() => import("../../components/MyPagination"));
 import YesNoModal from "../../components/YesNoModal";
 import { format, startOfMonth } from "date-fns";
+import useDebounce from "../../custom/UseDebounce";
 
 type Receipt = {
     r_no: number;
@@ -47,6 +48,7 @@ const Receipt: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertId, setAlertId] = useState<number>(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const debouncedText = useDebounce(searchTerm)
     const [duration, setDuration] = useState<Duration>({
         fromDate: format(startOfMonth(new Date()), "yyyy-MM-dd"),
         toDate: format(new Date(), "yyyy-MM-dd"),
@@ -55,6 +57,7 @@ const Receipt: React.FC = () => {
     const getReceipts = async (page: number = 1, query = "") => {
         try {
             setLoading(true);
+            setReceipts([])
             const result = await axios.get(
                 `${API_URL}receipt?page=${page}&query=${query}&from=${duration.fromDate}&to=${duration.toDate}`
             );
@@ -109,13 +112,13 @@ const Receipt: React.FC = () => {
     };
 
     useEffect(() => {
-        getReceipts(currentPage, searchTerm);
+        getReceipts(currentPage, debouncedText);
     }, [currentPage]);
 
     useEffect(() => {
         setCurrentPage(1)
-        getReceipts(1, searchTerm);
-    }, [searchTerm, duration]);
+        getReceipts(1, debouncedText);
+    }, [debouncedText, duration]);
 
     return (
         <Container fluid>
