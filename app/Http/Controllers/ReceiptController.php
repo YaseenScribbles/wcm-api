@@ -78,7 +78,7 @@ class ReceiptController extends Controller
                 ]);
             }
             DB::commit();
-            return response()->json(['message' => 'receipt created successfully', 'id' => $master->id, 'date' => $master->created_at]);
+            return response()->json(['message' => 'receipt created successfully', 'id' => $master->r_no, 'date' => $master->created_at]);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
