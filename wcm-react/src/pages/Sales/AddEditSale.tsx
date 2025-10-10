@@ -1001,6 +1001,7 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                             <Button
                                                 variant="dark"
                                                 className="d-flex"
+                                                disabled={!item.isNewRow}
                                                 onClick={() => {
                                                     updateState({
                                                         type: "REMOVE_ITEM",
