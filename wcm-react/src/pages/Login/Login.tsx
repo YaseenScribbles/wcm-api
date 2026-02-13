@@ -89,20 +89,20 @@ const Login = () => {
             }}
         >
             <div
-                className="glass-card d-flex flex-column justify-content-center align-items-center p-xl-4 p-lg-3 rounded"
-                style={{ width: "20dvw", height: "45dvh" }}
+                className="glass-card d-flex flex-column justify-content-center align-items-center p-xl-4 p-xxl-5 rounded"
+                style={{ width: "20dvw", height: "50dvh" }}
             >
-                {loading && (
-                    <div className="loader w-100 text-end">
+                <div className="loader w-100 text-end" style={{ height: 25 }}>
+                    {loading && (
                         <box-icon
                             color="white"
                             name="loader"
                             animation="spin"
                         ></box-icon>
-                    </div>
-                )}
+                    )}
+                </div>
                 <div className="app-title mb-3 text-light">W C M</div>
-                <div className="login-form w-75 mt-xl-5">
+                <div className="login-form w-100 mt-xl-5">
                     <Form.Control
                         className="mb-3"
                         type="email"
@@ -130,20 +130,20 @@ const Login = () => {
                         required
                     />
                     <Button
-                        variant="dark"
+                        variant="secondary"
                         className="w-100 mb-2"
                         onClick={login}
+                        disabled={loading}
                     >
                         Log In
                     </Button>
-                    {notifications.length > 0 && (
-                        <p
-                            className="error-msg text-light w-100 nowrap mb-1"
-                            role="alert"
-                        >
-                            {notifications[0].message.toUpperCase()}
-                        </p>
-                    )}
+                    <p
+                        className="error-msg text-center text-warning w-100 nowrap"
+                        style={{ height: 20 }}
+                        role="alert"
+                    >
+                        {`${notifications.length > 0 ? notifications[0].message.toUpperCase() : ""}`}
+                    </p>
                 </div>
             </div>
         </div>

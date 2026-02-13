@@ -19,11 +19,11 @@ Font.register({
     family: "Roboto",
     fonts: [
         {
-            src: "https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf", // Roboto Regular
+            src: "/fonts/Roboto-Regular.ttf?v=1", // Roboto Regular
             fontWeight: "normal",
         },
         {
-            src: "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlfBBc9.ttf", // Roboto Bold
+            src: "/fonts/Roboto-Bold.ttf?v=1", // Roboto Bold
             fontWeight: "bold",
         },
     ],
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto",
         fontWeight: "bold",
         fontSize: 14,
-        marginBottom: 20,
+        marginBottom: 10,
         display: "flex",
         alignItems: "center",
     },
@@ -104,11 +104,11 @@ const styles = StyleSheet.create({
     heading: {
         fontFamily: "Roboto",
         fontSize: 12,
-        width: "55",
+        width: 55,
     },
     colon: {
-        fontSize: "10",
-        width: "20",
+        fontSize: 10,
+        width: 20,
     },
     master: {
         fontFamily: "Roboto",
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     columns: {
         display: "flex",
         flexDirection: "row",
-        marginBottom: "5",
+        marginBottom: 5,
     },
     summary: {
         display: "flex",
@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         width: "100%",
         fontFamily: "Roboto",
-        fontSize: "12",
+        fontSize: 12,
         fontWeight: "bold",
-        marginBottom: "5",
+        marginBottom: 5,
     },
 });
 
@@ -139,14 +139,14 @@ type StockProps = {
 const StockDocument: React.FC<StockProps> = ({ stock }) => {
     return (
         <Document>
-            <Page style={styles.page} break>
+            <Page style={styles.page} size={"A4"}>
                 {/* {Company Name} */}
-                <View style={styles.companyName} fixed>
+                <View style={styles.companyName}>
                     <Text>ESSA GARMENTS PRIVATE LIMITED</Text>
                 </View>
 
                 {/* {Company Address} */}
-                <View style={[styles.center, styles.text]} fixed>
+                <View style={[styles.center, styles.text]}>
                     <Text>
                         NO. 21, VENKATESAIYA COLONY, KANGEYAM ROAD, TIRUPUR -
                         641604
@@ -154,72 +154,65 @@ const StockDocument: React.FC<StockProps> = ({ stock }) => {
                 </View>
 
                 {/* Title */}
-                <View style={styles.title} fixed>
+                <View style={styles.title}>
                     <Text>Stock Report</Text>
                 </View>
 
                 {/* Sale Items Table */}
-                <View style={styles.tableContainer}>
-                    {/* Table Header */}
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                        <Text style={[styles.tableCell, { width: "10%" }]}>
-                            S No
-                        </Text>
-                        <Text style={styles.tableCell}>Cloth</Text>
-                        <Text style={styles.tableCell}>Color</Text>
-                        <Text
-                            style={[styles.tableCell, { textAlign: "right" }]}
-                        >
-                            Weight
-                        </Text>
-                    </View>
+                {/* <View style={styles.tableContainer}> */}
+                {/* Table Header */}
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                    <Text style={[styles.tableCell, { width: "10%" }]}>
+                        S No
+                    </Text>
+                    <Text style={styles.tableCell}>Cloth</Text>
+                    <Text style={styles.tableCell}>Color</Text>
+                    <Text style={[styles.tableCell, { textAlign: "right" }]}>
+                        Weight
+                    </Text>
+                </View>
 
-                    {/* Table Rows */}
-                    {stock.map((item, index) => (
-                        <View key={index} style={styles.tableRow}>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { width: "10%", textAlign: "center" },
-                                ]}
-                            >
-                                {index + 1}
-                            </Text>
-                            <Text style={styles.tableCell}>
-                                {item.cloth.toUpperCase()}
-                            </Text>
-                            <Text style={styles.tableCell}>
-                                {item.color.toUpperCase()}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCell,
-                                    { textAlign: "right" },
-                                ]}
-                            >
-                                {(+item.weight).toFixed(2)}
-                            </Text>
-                        </View>
-                    ))}
-
-                    <View style={[styles.tableFooter, styles.tableRow]}>
-                        <Text
-                            style={[styles.tableCell, { width: "10%" }]}
-                        ></Text>
-                        <Text style={styles.tableCell}></Text>
-                        <Text style={styles.tableCell}></Text>
+                {/* Table Rows */}
+                {stock.map((item, index) => (
+                    <View key={index} style={styles.tableRow}>
                         <Text
                             style={[
                                 styles.tableCell,
-                                { textAlign: "right", fontWeight: "bold" },
+                                { width: "10%", textAlign: "center" },
                             ]}
                         >
-                            {stock
-                                .reduce((acc, item) => acc + +item.weight, 0)
-                                .toFixed(2)}
+                            {index + 1}
+                        </Text>
+                        <Text style={styles.tableCell}>
+                            {item.cloth.toUpperCase()}
+                        </Text>
+                        <Text style={styles.tableCell}>
+                            {item.color.toUpperCase()}
+                        </Text>
+                        <Text
+                            style={[styles.tableCell, { textAlign: "right" }]}
+                        >
+                            {(+item.weight).toFixed(2)}
                         </Text>
                     </View>
+                ))}
+
+                <View style={[styles.tableFooter, styles.tableRow]}>
+                    <Text style={[styles.tableCell, { width: "10%" }]}></Text>
+                    <Text style={styles.tableCell}></Text>
+                    <Text style={styles.tableCell}></Text>
+                    <Text
+                        style={[
+                            styles.tableCell,
+                            { textAlign: "right", fontWeight: "bold" },
+                        ]}
+                    >
+                        {stock
+                            .reduce((acc, item) => acc + +item.weight, 0)
+                            .toFixed(2)}
+                    </Text>
                 </View>
+                {/* </View> */}
                 <View style={styles.summary}>
                     <Text>Total Weight</Text>
                     <Text>

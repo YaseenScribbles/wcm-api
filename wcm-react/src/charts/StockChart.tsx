@@ -24,7 +24,7 @@ const StockChart: React.FC<StockChartProps> = ({ stock }) => {
     const [height, setHeight] = useState(0);
 
     const transformedData = stock.map((item) => ({
-        Label: `${item.cloth.toUpperCase()} - ${item.color.toUpperCase()}`,
+        Label: `${item.color.toUpperCase()}`,
         Weight: parseFloat((+item.weight).toFixed(2)),
     }));
 

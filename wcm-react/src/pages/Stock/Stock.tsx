@@ -119,24 +119,24 @@ const Stock: React.FC = () => {
                 title="STOCK"
                 buttonText="EXCEL"
                 buttonFunction={download}
+                isReport
                 secondButtonText="PDF"
                 secondButtonFunction={async () => {
-                    let stocks: Stock[] = [];
-
                     try {
-                        stocks = await fetchStock();
+                        let stocks: Stock[] = await fetchStock();
+                        console.log(stocks);
+                        const blob = await pdf(
+                            <StockDocument stock={stocks} />
+                        ).toBlob();
+                        saveAs(blob, "stock-report.pdf");
                     } catch (error: any) {
                         addNotification({
                             message: error.message,
                             type: "failure",
                         });
                     }
-                    const blob = await pdf(
-                        <StockDocument stock={stocks} />
-                    ).toBlob();
-                    saveAs(blob, "stock-report.pdf");
+
                 }}
-                isReport
             />
             <hr />
             <Card className="p-2">

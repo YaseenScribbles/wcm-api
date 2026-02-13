@@ -40,11 +40,11 @@ Font.register({
     family: "Roboto",
     fonts: [
         {
-            src: "https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf", // Roboto Regular
+            src: "/fonts/Roboto-Regular.ttf?v=1", // Roboto Regular
             fontWeight: "normal",
         },
         {
-            src: "https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlfBBc9.ttf", // Roboto Bold
+            src: "/fonts/Roboto-Bold.ttf?v=1", // Roboto Bold
             fontWeight: "bold",
         },
     ],
