@@ -89,10 +89,11 @@ const Header: React.FC<HeaderProps> = ({
                             }`}
                             onClick={buttonFunction}
                         >
-                            <box-icon
-                                name={isReport ? "down-arrow-circle" : "plus"}
-                                color="white"
-                            ></box-icon>
+                            <i
+                                // name={isReport ? "down-arrow-circle" : "plus"}
+                                // color="white"
+                                className={`bx text-white fs-4 ${isReport ? "bx-down-arrow-circle" : "bx-plus"}`}
+                            ></i>
                             <div>{buttonText}</div>
                         </Button>
                     )}
@@ -102,10 +103,11 @@ const Header: React.FC<HeaderProps> = ({
                             className="d-flex gap-1"
                             onClick={secondButtonFunction}
                         >
-                            <box-icon
-                                name={"down-arrow-circle"}
-                                color="white"
-                            ></box-icon>
+                            <i
+                                // name={"down-arrow-circle"}
+                                // color="white"
+                                className="bx bx-down-arrow-circle text-white fs-4"
+                            ></i>
                             <div>{secondButtonText}</div>
                         </Button>
                     )}

@@ -533,10 +533,11 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                                 }}
                             >
                                 <div className="d-flex justify-content-center align-items-center">
-                                    <box-icon
-                                        name="plus"
-                                        color="white"
-                                    ></box-icon>
+                                    <i
+                                        // name="plus"
+                                        // color="white"
+                                        className="bx bx-plus text-white fs-4"
+                                    ></i>
                                 </div>
                             </Button>
                         </div>
@@ -557,11 +558,12 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                         {loading ? (
                             <tr>
                                 <td colSpan={5} className="text-center">
-                                    <box-icon
-                                        name="loader"
-                                        animation="spin"
-                                        size="lg"
-                                    ></box-icon>
+                                    <i
+                                        // name="loader"
+                                        // animation="spin"
+                                        // size="lg"
+                                        className="bx bx-loader bx-spin fs-1"
+                                    ></i>
                                 </td>
                             </tr>
                         ) : (
@@ -690,10 +692,11 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                                                     });
                                                 }}
                                             >
-                                                <box-icon
-                                                    name="plus"
-                                                    color="white"
-                                                ></box-icon>
+                                                <i
+                                                    // name="plus"
+                                                    // color="white"
+                                                    className="bx bx-plus text-white fs-4"
+                                                ></i>
                                             </Button>
                                             <Button
                                                 variant="dark"
@@ -707,10 +710,11 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                                                     });
                                                 }}
                                             >
-                                                <box-icon
-                                                    name="minus"
-                                                    color="white"
-                                                ></box-icon>
+                                                <i
+                                                    // name="minus"
+                                                    // color="white"
+                                                    className="bx bx-minus text-white fs-4"
+                                                ></i>
                                             </Button>
                                         </div>
                                     </td>
@@ -728,7 +732,11 @@ const AddEditReceipt: React.FC<AddEditReceiptProps> = ({
                         .toFixed(2)}
                 </span>
                 {loading ? (
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 ) : (
                     <Button
                         onClick={edit ? updateReceipt : addReceipt}

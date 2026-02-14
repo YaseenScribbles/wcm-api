@@ -45,7 +45,11 @@ const YesNoModal: React.FC<YesNoModalProps> = ({
             onHide={onHide}
         >
             <Modal.Header closeButton>
-                <box-icon name="shield-plus" color="black"></box-icon>
+                <i
+                // name="shield-plus"
+                // color="black"
+                className="bx bx-shield-plus text-black fs-4"
+                ></i>
                 <Modal.Title className="ms-1">Confirmation</Modal.Title>
             </Modal.Header>
 

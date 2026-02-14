@@ -170,7 +170,7 @@ const Sale: React.FC = () => {
                                                         <Tooltip>edit</Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
+                                                    <i
                                                         onClick={() => {
                                                             if (
                                                                 !menus.find(
@@ -192,9 +192,10 @@ const Sale: React.FC = () => {
                                                             setEditMode(true);
                                                             setShowModal(true);
                                                         }}
-                                                        name="edit"
-                                                        color="white"
-                                                    ></box-icon>
+                                                        // name="edit"
+                                                        // color="white"
+                                                        className="bx bx-edit text-white fs-4"
+                                                    ></i>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger
                                                     placement="top"
@@ -204,7 +205,7 @@ const Sale: React.FC = () => {
                                                         </Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
+                                                    <i
                                                         onClick={() => {
                                                             if (
                                                                 !menus.find(
@@ -225,9 +226,10 @@ const Sale: React.FC = () => {
                                                             setAlertId(sale.id);
                                                             setShowAlert(true);
                                                         }}
-                                                        name="x"
-                                                        color="white"
-                                                    ></box-icon>
+                                                        // name="x"
+                                                        // color="white"
+                                                        className="bx bx-x text-white fs-4"
+                                                    ></i>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger
                                                     placement="top"
@@ -237,16 +239,17 @@ const Sale: React.FC = () => {
                                                         </Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
-                                                        name="file"
-                                                        color="white"
+                                                    <i
+                                                        // name="file"
+                                                        // color="white"
+                                                        className="bx bx-file text-white fs-4"
                                                         onClick={() => {
                                                             window.open(
                                                                 `/sale/${sale.id}`,
                                                                 "_blank"
                                                             );
                                                         }}
-                                                    ></box-icon>
+                                                    ></i>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger
                                                     placement="top"
@@ -256,16 +259,17 @@ const Sale: React.FC = () => {
                                                         </Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
-                                                        name="file"
-                                                        color="white"
+                                                    <i
+                                                        // name="file"
+                                                        // color="white"
+                                                        className="bx bx-file text-white fs-4"
                                                         onClick={() => {
                                                             window.open(
                                                                 `/variation/${sale.id}`,
                                                                 "_blank"
                                                             );
                                                         }}
-                                                    ></box-icon>
+                                                    ></i>
                                                 </OverlayTrigger>
                                             </div>
                                         </td>
@@ -280,10 +284,11 @@ const Sale: React.FC = () => {
                     {lastPage > 1 && (
                         <Suspense
                             fallback={
-                                <box-icon
-                                    name="loader-alt"
-                                    animation="spin"
-                                ></box-icon>
+                                <i
+                                    // name="loader-alt"
+                                    // animation="spin"
+                                    className="bx bx-loader-alt bx-spin fs-4"
+                                ></i>
                             }
                         >
                             <CustomPagination
@@ -297,7 +302,11 @@ const Sale: React.FC = () => {
             </Card>
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <AddEditModal

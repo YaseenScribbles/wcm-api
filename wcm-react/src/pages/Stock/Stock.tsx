@@ -177,10 +177,11 @@ const Stock: React.FC = () => {
                     {lastPage > 1 && (
                         <Suspense
                             fallback={
-                                <box-icon
-                                    name="loader-alt"
-                                    animation="spin"
-                                ></box-icon>
+                                <i
+                                    // name="loader-alt"
+                                    // animation="spin"
+                                    className="bx bx-loader-alt bx-spin fs-4"
+                                ></i>
                             }
                         >
                             <CustomPagination

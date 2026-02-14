@@ -26,7 +26,7 @@ const MyNavbar = () => {
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
                     <Navbar.Brand href="/dashboard">
-                        WASTE CLOTH MANAGEMENT
+                        W C M
                     </Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link

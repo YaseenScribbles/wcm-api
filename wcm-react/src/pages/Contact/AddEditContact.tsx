@@ -327,7 +327,11 @@ const AddEditContact: React.FC<AddEditContactProps> = ({
             </Modal.Body>
             <Modal.Footer>
                 {loading ? (
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 ) : (
                     <Button
                         onClick={edit ? updateContact : addContact}

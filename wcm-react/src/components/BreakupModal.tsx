@@ -125,7 +125,10 @@ const Breakup: React.FC<BreakupProps> = ({
                                     ledgerInputRef.current?.focus();
                                 }}
                             >
-                                <box-icon name="plus" color="white"></box-icon>
+                                <i
+                                // name="plus"
+                                // color="white"
+                                className="bx bx-plus text-white fs-4"></i>
                             </Button>
                         </Col>
                     </Row>
@@ -138,11 +141,12 @@ const Breakup: React.FC<BreakupProps> = ({
                 </Row>
                 {loading ? (
                     <div className="d-flex justify-content-center">
-                        <box-icon
-                            name="loader"
-                            animation="spin"
-                            size="lg"
-                        ></box-icon>
+                        <i
+                            // name="loader"
+                            // animation="spin"
+                            // size="lg"
+                            className="bx bx-loader bx-spin fs-3"
+                        ></i>
                     </div>
                 ) : (
                     breakup.length > 0 &&
@@ -154,9 +158,10 @@ const Breakup: React.FC<BreakupProps> = ({
                                 {(+b.value).toFixed(2)}
                             </Col>
                             <Col className="text-end">
-                                <box-icon
-                                    name="x"
-                                    color="black"
+                                <i
+                                    // name="x"
+                                    // color="black"
+                                    className="bx bx-x text-black fs-4"
                                     onClick={() => {
                                         setBreakup((prev) =>
                                             prev.filter(
@@ -166,7 +171,7 @@ const Breakup: React.FC<BreakupProps> = ({
                                             )
                                         );
                                     }}
-                                ></box-icon>
+                                ></i>
                             </Col>
                         </Row>
                     ))

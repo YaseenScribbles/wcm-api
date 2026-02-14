@@ -716,11 +716,12 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                         {loading ? (
                             <tr>
                                 <td colSpan={8} className="text-center">
-                                    <box-icon
-                                        name="loader"
-                                        animation="spin"
-                                        size="lg"
-                                    ></box-icon>
+                                    <i
+                                        // name="loader"
+                                        // animation="spin"
+                                        // size="lg"
+                                        className="bx bx-loader bx-spin fs-1"
+                                    ></i>
                                 </td>
                             </tr>
                         ) : (
@@ -1011,10 +1012,11 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                                                     });
                                                 }}
                                             >
-                                                <box-icon
-                                                    name="minus"
-                                                    color="white"
-                                                ></box-icon>
+                                                <i
+                                                    // name="minus"
+                                                    // color="white"
+                                                    className="bx bx-minus text-white fs-4"
+                                                ></i>
                                             </Button>
                                         </div>
                                     </td>
@@ -1032,7 +1034,11 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                         variant="dark"
                         className="d-flex"
                     >
-                        <box-icon name="plus" color="white"></box-icon>
+                        <i
+                        // name="plus"
+                        // color="white"
+                        className="bx bx-plus fs-4 text-white"
+                        ></i>
                     </Button>
                 </div>
                 <BreakupModal
@@ -1134,7 +1140,11 @@ const AddEditSales: React.FC<AddEditSaleProps> = ({
                     </Button>
                 )} */}
                 {loading ? (
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 ) : (
                     <Button
                         disabled={actual.weight == 0 || actual.amount == 0}

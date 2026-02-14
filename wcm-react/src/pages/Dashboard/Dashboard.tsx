@@ -70,11 +70,12 @@ const Dashboard = () => {
             >
                 {loading ? (
                     <div className="d-flex justify-content-center align-items-center">
-                        <box-icon
-                            name="loader"
-                            animation="spin"
-                            size="lg"
-                        ></box-icon>
+                        <i
+                            // name="loader"
+                            // animation="spin"
+                            // size="lg"
+                            className="bx bx-loader bx-spin fs-1 mt-5"
+                        ></i>
                     </div>
                 ) : (
                     <div className="d-flex flex-column flex-grow-1">

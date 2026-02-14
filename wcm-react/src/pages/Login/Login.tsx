@@ -94,11 +94,12 @@ const Login = () => {
             >
                 <div className="loader w-100 text-end" style={{ height: 25 }}>
                     {loading && (
-                        <box-icon
-                            color="white"
-                            name="loader"
-                            animation="spin"
-                        ></box-icon>
+                        <i
+                            // color="white"
+                            // name="loader"
+                            // animation="spin"
+                            className="bx bx-loader bx-spin fs-4 text-white"
+                        ></i>
                     )}
                 </div>
                 <div className="app-title mb-3 text-light">W C M</div>

@@ -170,11 +170,12 @@ const UserRights: React.FC<UserRightProps> = ({ userId, onHide, show }) => {
                         {loading ? (
                             <tr>
                                 <td colSpan={3} className="text-center">
-                                    <box-icon
-                                        color="white"
-                                        name="loader-alt"
-                                        animation="spin"
-                                    ></box-icon>
+                                    <i
+                                        // color="white"
+                                        // name="loader-alt"
+                                        // animation="spin"
+                                        className="bx bx-loader-alt bx-spin fs-4 text-white"
+                                    ></i>
                                 </td>
                             </tr>
                         ) : (

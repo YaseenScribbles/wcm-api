@@ -120,11 +120,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ show, onHide, user }) => {
             <ModalBody>
                 {loading ? (
                     <div className="text-center">
-                        <box-icon
-                            name="loader"
-                            animation="spin"
-                            size="lg"
-                        ></box-icon>
+                        <i
+                            // name="loader"
+                            // animation="spin"
+                            // size="lg"
+                            className="bx bx-loader bx-spin fs-1"
+                        ></i>
                     </div>
                 ) : (
                     <div>
@@ -167,7 +168,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ show, onHide, user }) => {
             </ModalBody>
             <ModalFooter>
                 {loading ? (
-                    <box-icon name="loader" animation="spin"></box-icon>
+                    <i
+                    // name="loader"
+                    // animation="spin"
+                    className="bx bx-loader bx-spin fs-4"
+                    ></i>
                 ) : (
                     <Button onClick={updateUser} variant="dark">
                         UPDATE

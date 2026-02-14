@@ -129,7 +129,7 @@ const Cloth = () => {
                                         <td>{cloth.user.name.toUpperCase()}</td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
-                                                <box-icon
+                                                <i
                                                     onClick={() => {
                                                         if (
                                                             !menus.find(menu => menu.name === "CLOTH")?.edit
@@ -145,20 +145,22 @@ const Cloth = () => {
                                                         setEditMode(true);
                                                         setShowModal(true);
                                                     }}
-                                                    name="edit"
-                                                    color="white"
-                                                ></box-icon>
-                                                <box-icon
+                                                    // name="edit"
+                                                    // color="white"
+                                                    className="bx bx-edit text-white fs-4"
+                                                ></i>
+                                                <i
                                                     onClick={() =>
                                                         deleteCloth(cloth.id)
                                                     }
-                                                    name={
-                                                        cloth.active == "1"
-                                                            ? "minus"
-                                                            : "plus"
-                                                    }
-                                                    color="white"
-                                                ></box-icon>
+                                                    // name={
+                                                    //     cloth.active == "1"
+                                                    //         ? "minus"
+                                                    //         : "plus"
+                                                    // }
+                                                    // color="white"
+                                                    className={`bx text-white fs-4 ${cloth.active == "1" ? "bx-minus" : "bx-plus"}`}
+                                                ></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -172,10 +174,11 @@ const Cloth = () => {
                     {lastPage > 1 && (
                         <Suspense
                             fallback={
-                                <box-icon
-                                    name="loader-alt"
-                                    animation="spin"
-                                ></box-icon>
+                                <i
+                                    // name="loader-alt"
+                                    // animation="spin"
+                                    className="bx bx-loader-alt bx-spin fs-4"
+                                ></i>
                             }
                         >
                             <CustomPagination
@@ -189,7 +192,11 @@ const Cloth = () => {
             </Card>
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <AddEditModal

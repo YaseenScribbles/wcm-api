@@ -152,7 +152,7 @@ const Users: React.FC = () => {
                                                         <Tooltip>Edit</Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
+                                                    <i
                                                         onClick={() => {
                                                             if (
                                                                 !menus.find(
@@ -174,29 +174,31 @@ const Users: React.FC = () => {
                                                             setEditMode(true);
                                                             setShowModal(true);
                                                         }}
-                                                        name="edit"
-                                                        color="white"
-                                                    ></box-icon>
+                                                        // name="edit"
+                                                        // color="white"
+                                                        className="bx bx-edit text-white fs-4"
+                                                    ></i>
                                                 </OverlayTrigger>
-                                                <box-icon
+                                                <i
                                                     hidden
                                                     onClick={() =>
                                                         deleteUser(user.id)
                                                     }
-                                                    name={
-                                                        user.active == "1"
-                                                            ? "minus"
-                                                            : "plus"
-                                                    }
-                                                    color="white"
-                                                ></box-icon>
+                                                    // name={
+                                                    //     user.active == "1"
+                                                    //         ? "minus"
+                                                    //         : "plus"
+                                                    // }
+                                                    // color="white"
+                                                    className={`bx text-white fs-4 ${user.active == "1" ? "bx-minus" : "bx-plus"}`}
+                                                ></i>
                                                 <OverlayTrigger
                                                     placement="top"
                                                     overlay={
                                                         <Tooltip>Menus</Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
+                                                    <i
                                                         onClick={() => {
                                                             if (
                                                                 !menus.find(
@@ -222,9 +224,10 @@ const Users: React.FC = () => {
                                                                 true
                                                             );
                                                         }}
-                                                        name="menu"
-                                                        color="white"
-                                                    ></box-icon>
+                                                        // name="menu"
+                                                        // color="white"
+                                                        className="bx bx-menu text-white fs-4"
+                                                    ></i>
                                                 </OverlayTrigger>
                                                 <OverlayTrigger
                                                     placement="top"
@@ -234,7 +237,7 @@ const Users: React.FC = () => {
                                                         </Tooltip>
                                                     }
                                                 >
-                                                    <box-icon
+                                                    <i
                                                         onClick={() => {
                                                             if (
                                                                 !menus.find(
@@ -259,9 +262,10 @@ const Users: React.FC = () => {
                                                                 true
                                                             );
                                                         }}
-                                                        name="list-check"
-                                                        color="white"
-                                                    ></box-icon>
+                                                        // name="list-check"
+                                                        // color="white"
+                                                        className="bx bx-list-check text-white fs-4"
+                                                    ></i>
                                                 </OverlayTrigger>
                                             </div>
                                         </td>
@@ -276,10 +280,11 @@ const Users: React.FC = () => {
                     {lastPage > 1 && (
                         <Suspense
                             fallback={
-                                <box-icon
-                                    name="loader-alt"
-                                    animation="spin"
-                                ></box-icon>
+                                <i
+                                    // name="loader-alt"
+                                    // animation="spin"
+                                    className="bx bx-loader-alt bx-spin fs-4"
+                                ></i>
                             }
                         >
                             <CustomPagination
@@ -293,7 +298,11 @@ const Users: React.FC = () => {
             </Card>
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <AddEditModal
@@ -310,7 +319,11 @@ const Users: React.FC = () => {
 
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <UpdateUserMenu
@@ -323,7 +336,11 @@ const Users: React.FC = () => {
             </Suspense>
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <RightModal

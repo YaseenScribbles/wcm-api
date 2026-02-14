@@ -199,7 +199,7 @@ const Contact: React.FC = () => {
                                         </td>
                                         <td>
                                             <div className="d-flex align-items-center gap-1">
-                                                <box-icon
+                                                <i
                                                     onClick={() => {
                                                         if (
                                                             !menus.find(
@@ -219,23 +219,25 @@ const Contact: React.FC = () => {
                                                         setEditMode(true);
                                                         setShowModal(true);
                                                     }}
-                                                    name="edit"
-                                                    color="white"
-                                                ></box-icon>
-                                                <box-icon
+                                                    // name="edit"
+                                                    // color="white"
+                                                    className="bx bx-edit text-white fs-4"
+                                                ></i>
+                                                <i
                                                     hidden
                                                     onClick={() =>
                                                         deleteContact(
                                                             contact.id
                                                         )
                                                     }
-                                                    name={
-                                                        contact.active == "1"
-                                                            ? "minus"
-                                                            : "plus"
-                                                    }
-                                                    color="white"
-                                                ></box-icon>
+                                                    // name={
+                                                    //     contact.active == "1"
+                                                    //         ? "minus"
+                                                    //         : "plus"
+                                                    // }
+                                                    // color="white"
+                                                    className={`bx text-white fs-4 ${contact.active == "1" ? "bx-minus" : "bx-plus"}`}
+                                                ></i>
                                             </div>
                                         </td>
                                     </tr>
@@ -249,10 +251,11 @@ const Contact: React.FC = () => {
                     {lastPage > 1 && (
                         <Suspense
                             fallback={
-                                <box-icon
-                                    name="loader-alt"
-                                    animation="spin"
-                                ></box-icon>
+                                <i
+                                    // name="loader-alt"
+                                    // animation="spin"
+                                    className="bx bx-loader-alt bx-spin fs-4"
+                                ></i>
                             }
                         >
                             <CustomPagination
@@ -266,7 +269,11 @@ const Contact: React.FC = () => {
             </Card>
             <Suspense
                 fallback={
-                    <box-icon name="loader-alt" animation="spin"></box-icon>
+                    <i
+                    // name="loader-alt"
+                    // animation="spin"
+                    className="bx bx-loader-alt bx-spin fs-4"
+                    ></i>
                 }
             >
                 <AddEditModal
